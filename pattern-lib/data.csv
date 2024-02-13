@@ -1,0 +1,31 @@
+﻿Brand,Device Type,Placement Type,Pattern Ref header,pattern ref and image,additional info
+Halifax,app,bpt,pattern-ref,ref text <br> image url,character limit info
+Halifax,app,asm,pattern-ref,ref <br> image,character limit info
+Halifax,desktop,bpt,pattern-ref,ref <br> image,character limit info
+Halifax,desktop,asm,pattern-ref,ref <br> image,character limit info
+Halifax,mbr,bpt,pattern-ref,ref <br> image,character limit info
+Lloyds,app,asm,pattern-ref,ref <br> image,character limit info
+Lloyds,app,bpt,pattern-ref,ref <br> image,character limit info
+Lloyds,app,lnk,pattern-ref,ref <br> image,character limit info
+Lloyds,desktop,asm,pattern-ref,ref <br> image,character limit info
+Lloyds,desktop,bpt,LLY-DKP-BPT-001,LLY-DKP-BPT-001-WF <br> image,WF Info
+Lloyds,desktop,bpt,LLY-DKP-BPT-001,LLY-DKP-BPT-001-A <br> image,version A character limit info
+Lloyds,desktop,bpt,LLY-DKP-BPT-001,LLY-DKP-BPT-001-B <br> image,version B character limit info
+Lloyds,desktop,bpt,LLY-DKP-BPT-002,ref <br> image,character limit info
+Lloyds,desktop,bpt,LLY-DKP-BPT-003,ref <br> image,character limit info
+Lloyds,mbr,lnk,pattern-ref,ref <br> image,character limit info
+Lloyds,mbr,asm,pattern-ref,ref <br> image,character limit info
+BoS,app,asm,pattern-ref,ref <br> image,character limit info
+BoS,app,bpt,pattern-ref,ref <br> image,character limit info
+BoS,app,lnk,pattern-ref,ref <br> image,character limit info
+BoS,app,lnk,pattern-ref,ref <br> image,character limit info
+BoS,desktop,asm,pattern-ref,ref <br> image,character limit info
+BoS,desktop,bpt,pattern-ref,ref <br> image,character limit info
+BoS,mbr,asm,pattern-ref,ref <br> image,character limit info
+BoS,mbr,bpt,pattern-ref,ref <br> image,character limit info
+MBNA,app,bpt,pattern-ref,ref <br> image,character limit info
+MBNA,app,lnk,pattern-ref,ref <br> image,character limit info
+MBNA,app,lnk,pattern-ref,ref <br> image,character limit info
+MBNA,desktop,asm,pattern-ref,ref <br> image,character limit info
+MBNA,mbr,asm,pattern-ref,ref <br> image,character limit info
+MBNA,mbr,bpt,pattern-ref,ref <br> image,character limit info

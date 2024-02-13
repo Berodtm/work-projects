@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Merriweather:ital@0;1&family=Open+Sans&family=Work+Sans:wght@400;500;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AB Test Options</title>
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <nav>
+        <p><small><strong>Rob Dunn Coding Projects</strong></small></p>
+        <ul>
+            <li><a href="https://github.com/Berodtm/codecademy-projects" target="_blank">GitHub Projects</a></li>
+            <li><a href="https://berodtm.github.io/RobsBlog/" target="_blank">Blog</a></li>
+            <li><a href="https://www.linkedin.com/in/rob-dunn-7288061b7/" target="_blank">linkedin</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Asset Testing Options</h1>
+        <h2>Placeholder Content.</h2>
+
+        <label for="deviceType">Device Type:</label>
+        <div id="deviceType">
+            <div class="form-items">
+                <input type="radio" id="desktop" name="device" value="Desktop">
+                <label for="desktop">Desktop</label>
+                <input type="radio" id="mobileBrowser" name="device" value="Mobile Browser">
+                <label for="mobileBrowser">Mobile Browser</label>
+                <input type="radio" id="app" name="device" value="App">
+                <label for="app">App</label><br>
+            </div>
+            <div class="form-items">    
+                <label for="placementType">Placement Type:</label>
+                <select id="placementType">
+                    <option value="ASM">Account Module (ASM)</option>
+                    <option value="BPT">Big Prompt (BPT)</option>
+                    <option value="LNK">Account Link (LNK)</option>
+                </select>
+            </div>
+            <br>
+            <button onclick="generateTable()">Show AB Test Options</button>
+
+            <div id="tableArea"></div>
+        </div>
+    </main>
+
+
+    <footer>
+        <p>
+            Project for work. Page created by Rob Dunn.
+        </p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#results {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.result-item {
+    width: 48%;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex; /* Add this to make the inner divs flex containers */
+    justify-content: space-between; /* Space between inner divs */
+}
+.pattern-image,
+.additional-info {
+    width: 49%; /* Use half the width for each div */
+    padding: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pattern-image img {
+    max-width: 100%;
+    height: auto;
+}
+.result-item img {
+    max-width: 100%;
+    height: auto;
+}
+#results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.result-item > div {
+    width: 49%;
+}
+
