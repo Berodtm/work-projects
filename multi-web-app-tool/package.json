@@ -2,8 +2,8 @@
   "name": "multi-web-app-tool",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "homepage": "https://berodtm.github.io/work-projects-lbg/multi-web-app-tool/",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/berodtm/work-projects-lbg/"

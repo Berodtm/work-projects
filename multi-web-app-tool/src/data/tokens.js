@@ -1,6 +1,6 @@
 const tokens = [
-    { label: 'Tokenised', label: 'ty' },
-    { label: 'Non Tokenised', label: 'tn' }
+    { label: 'Tokenised', value: 'ty' },
+    { label: 'Non Tokenised', value: 'tn' }
 ]
 
 export default tokens;
