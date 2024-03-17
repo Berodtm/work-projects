@@ -25,7 +25,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ "https://berodtm.github.io/work-projects-lbg" }}
+      url: ${{ 'https://berodtm.github.io/work-projects-lbg' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
