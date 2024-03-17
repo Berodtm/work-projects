@@ -6,7 +6,7 @@
   "homepage": "https://berodtm.github.io/work-projects-lbg/multi-web-app-tool/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/berodtm/work-projects-lbg"
+    "url": "https://github.com/berodtm/work-projects-lbg/"
   },
   "scripts": {
     "predeploy": "npm run build",
