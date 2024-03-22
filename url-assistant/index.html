@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Converter Tool</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+<div id="urlConverter">
+    <h2>CWA Link Converter</h2>
+    <input type="text" id="urlInput" placeholder="Enter URL here">
+    <br>
+    <div>
+        
+        <input type="radio" id="desktop" name="deviceType" value="desktop" checked>
+        <label for="desktop">Desktop</label>
+        <input type="radio" id="app" name="deviceType" value="app">
+        <label for="app">App</label>
+        <input type="radio" id="productHub" name="deviceType" value="productHub">
+        <label for="productHub">Product Hub</label>
+    </div>
+    <button onclick="convertURL()">Submit</button>
+    <div id="convertedUrl"></div>
+    <button id="copyUrlButton">Copy URL</button>
+</div>
+
+<script src="script.js"></script> <!-- Link to your JS file -->
+</body>
+</html>
