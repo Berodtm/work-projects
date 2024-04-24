@@ -32,16 +32,22 @@
 <body>
     <h1>JSON Editor</h1>
     <textarea id="jsonInput" rows="10" cols="50"></textarea><br>
-    <button onclick="displayJson()">Load JSON</button>
-    <div id="output"></div>
-    <!-- Dropdown for selecting product -->
+    <button onclick="displayJson()">Load JSON</button><br>
+
+    <!-- Existing Dropdown for selecting product -->
     <select id="productSelect" onchange="populateItemDropdown()"></select>
+
+    <!-- Button to initiate adding a new object -->
+    <button onclick="addObjectToSelectedProduct()">Add Object to Selected Product</button><br>
+
+
 
     <!-- Dropdown for selecting item to remove -->
     <select id="itemSelect"></select>
 
     <!-- Button to remove the selected item -->
     <button onclick="removeSelectedItem()">Remove Selected Item</button>
+    <div id="output"></div>
 
     <script>
         // Declare jsonData as a global variable to hold the parsed JSON
@@ -59,17 +65,6 @@
                 if (jsonData && jsonData.data && jsonData.data.products) {
                     populateProductDropdown(); // This should only be called here to ensure data is loaded
                     populateItemDropdown(); // Populate items for the first product by default
-
-                    // After creating fields for products, add a button for adding new objects
-                    jsonData.data.products.forEach(function (product, index) {
-                        // Create a new button to add objects to the category
-                        var addButton = document.createElement('button');
-                        addButton.textContent = "Add New Object to " + product.title;
-                        addButton.onclick = function () {
-                            addNewObjectToCategory(product.title);
-                        };
-                        outputDiv.appendChild(addButton); // Append the button directly to outputDiv for simplicity
-                    });
                 }
             } catch (e) {
                 document.getElementById('output').innerText = 'Invalid JSON!';
@@ -130,6 +125,12 @@
 
         function updateJsonDisplay() {
             document.getElementById('jsonInput').value = JSON.stringify(jsonData, null, 2);
+        }
+
+        function addObjectToSelectedProduct() {
+            var productIndex = document.getElementById('productSelect').value;
+            var productTitle = jsonData.data.products[productIndex].title;
+            addNewObjectToCategory(productTitle);
         }
 
         function addNewObjectToCategory(categoryTitle) {
