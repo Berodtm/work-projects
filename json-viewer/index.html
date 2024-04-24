@@ -59,6 +59,17 @@
                 if (jsonData && jsonData.data && jsonData.data.products) {
                     populateProductDropdown(); // This should only be called here to ensure data is loaded
                     populateItemDropdown(); // Populate items for the first product by default
+
+                    // After creating fields for products, add a button for adding new objects
+                    jsonData.data.products.forEach(function (product, index) {
+                        // Create a new button to add objects to the category
+                        var addButton = document.createElement('button');
+                        addButton.textContent = "Add New Object to " + product.title;
+                        addButton.onclick = function () {
+                            addNewObjectToCategory(product.title);
+                        };
+                        outputDiv.appendChild(addButton); // Append the button directly to outputDiv for simplicity
+                    });
                 }
             } catch (e) {
                 document.getElementById('output').innerText = 'Invalid JSON!';
