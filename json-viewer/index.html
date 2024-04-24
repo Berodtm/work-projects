@@ -34,11 +34,19 @@
     <textarea id="jsonInput" rows="10" cols="50"></textarea><br>
     <button onclick="displayJson()">Load JSON</button>
     <div id="output"></div>
+    <!-- Dropdown for selecting product -->
+    <select id="productSelect" onchange="populateItemDropdown()"></select>
+
+    <!-- Dropdown for selecting item to remove -->
+    <select id="itemSelect"></select>
+
+    <!-- Button to remove the selected item -->
+    <button onclick="removeSelectedItem()">Remove Selected Item</button>
 
     <script>
         // Declare jsonData as a global variable to hold the parsed JSON
         var jsonData = {};
- 
+
         function displayJson() {
             var jsonInput = document.getElementById('jsonInput').value;
             try {
@@ -46,6 +54,12 @@
                 var outputDiv = document.getElementById('output');
                 outputDiv.innerHTML = ''; // Clear previous output
                 createEditableFields(jsonData, outputDiv); // Generate new editable fields
+
+                // Populate dropdowns if products exist
+                if (jsonData && jsonData.data && jsonData.data.products) {
+                    populateProductDropdown(); // This should only be called here to ensure data is loaded
+                    populateItemDropdown(); // Populate items for the first product by default
+                }
             } catch (e) {
                 document.getElementById('output').innerText = 'Invalid JSON!';
             }
@@ -106,6 +120,102 @@
         function updateJsonDisplay() {
             document.getElementById('jsonInput').value = JSON.stringify(jsonData, null, 2);
         }
+
+        function addNewObjectToCategory(categoryTitle) {
+            // Prompt user for the number of key/value pairs they want to add
+            var numberOfPairs = parseInt(prompt("How many key/value pairs would you like to add?"));
+            if (isNaN(numberOfPairs) || numberOfPairs <= 0) {
+                alert("Please enter a valid number greater than 0.");
+                return; // Exit if the number is not valid
+            }
+
+            // Create new item object
+            var newItem = {};
+
+            // Loop through the number of pairs and prompt for each key and value
+            for (var i = 0; i < numberOfPairs; i++) {
+                var key = prompt("Enter key " + (i + 1) + ":");
+                if (!key) {
+                    alert("Key cannot be empty. Restarting process.");
+                    return; // Exit if no key is provided
+                }
+                var value = prompt("Enter value for " + key + ":");
+                if (value === null) {
+                    alert("Process cancelled.");
+                    return; // Exit if user cancels the value prompt
+                }
+                newItem[key] = value;
+            }
+
+            // Find the category in jsonData
+            var category = jsonData.data.products.find(function (product) {
+                return product.title === categoryTitle;
+            });
+
+            if (category) {
+                // Assuming 'items' is an array where new objects should be added
+                if (!category.items) {
+                    category.items = []; // Initialize 'items' if it doesn't exist
+                }
+                // Add the new item to the category's items array
+                category.items.push(newItem);
+
+                // Update the JSON display
+                updateJsonDisplay();
+
+                // Re-display all the fields to include the new item
+                displayJson();
+            }
+        }
+        function populateProductDropdown() {
+            var select = document.getElementById('productSelect');
+            select.innerHTML = ''; // Clear existing options
+            jsonData.data.products.forEach(function (product, index) {
+                var option = document.createElement('option');
+                option.value = index;
+                option.textContent = product.title;
+                select.appendChild(option);
+            });
+        }
+
+        // Updated to check if 'items' exists when populating item dropdown
+        function populateItemDropdown() {
+            var productIndex = document.getElementById('productSelect').value;
+            var select = document.getElementById('itemSelect');
+            select.innerHTML = ''; // Clear existing options
+
+            if (!jsonData.data.products[productIndex].items) {
+                jsonData.data.products[productIndex].items = []; // Initialize if not exist
+            }
+
+            var items = jsonData.data.products[productIndex].items;
+            items.forEach(function (item, index) {
+                var option = document.createElement('option');
+                option.value = index;
+                option.textContent = item.title || "Item " + index;
+                select.appendChild(option);
+            });
+        }
+
+        // Ensuring that removeSelectedItem checks if items exist
+        function removeSelectedItem() {
+            var productIndex = document.getElementById('productSelect').value;
+            var itemIndex = document.getElementById('itemSelect').value;
+
+            if (!jsonData.data.products[productIndex].items) {
+                alert("No items to remove.");
+                return; // Guard against undefined items array
+            }
+
+            // Remove the item from the array
+            jsonData.data.products[productIndex].items.splice(itemIndex, 1);
+
+            // Update display
+            updateJsonDisplay();
+            displayJson();
+        }
+        // Call this function on initial load and after updates
+        populateProductDropdown();
     </script>
 
 </body>
