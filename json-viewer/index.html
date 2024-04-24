@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JSON Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-size: 16px;
+        }
+
+        .json-key {
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        input[type="text"] {
+            margin-top: 5px;
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>JSON Editor</h1>
+    <textarea id="jsonInput" rows="10" cols="50"></textarea><br>
+    <button onclick="displayJson()">Load JSON</button>
+    <div id="output"></div>
+
+    <script>
+        // Declare jsonData as a global variable to hold the parsed JSON
+        var jsonData = {};
+ 
+        function displayJson() {
+            var jsonInput = document.getElementById('jsonInput').value;
+            try {
+                jsonData = JSON.parse(jsonInput); // Parse JSON input and store in the global variable
+                var outputDiv = document.getElementById('output');
+                outputDiv.innerHTML = ''; // Clear previous output
+                createEditableFields(jsonData, outputDiv); // Generate new editable fields
+            } catch (e) {
+                document.getElementById('output').innerText = 'Invalid JSON!';
+            }
+        }
+
+        function createEditableFields(data, parentElement, path = []) {
+            if (Array.isArray(data)) {
+                data.forEach((item, index) => {
+                    var div = document.createElement('div');
+                    div.innerHTML = `<span class="json-key">Item ${index + 1}:</span>`;
+                    var innerDiv = document.createElement('div');
+                    innerDiv.style.marginLeft = '20px';
+                    createEditableFields(item, innerDiv, path.concat(index));
+                    div.appendChild(innerDiv);
+                    parentElement.appendChild(div);
+                });
+            } else if (typeof data === 'object' && data !== null) {
+                Object.keys(data).forEach((key) => {
+                    var div = document.createElement('div');
+                    var span = document.createElement('span');
+                    span.textContent = key + ': ';
+                    div.appendChild(span);
+
+                    if (typeof data[key] === 'object' && data[key] !== null) {
+                        createEditableFields(data[key], div, path.concat(key));
+                    } else {
+                        var input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = data[key];
+                        input.onchange = function () {
+                            // Find the object to update using the path, and update the key with the new value
+                            let objToUpdate = jsonData;
+                            path.forEach((p) => { objToUpdate = objToUpdate[p]; });
+                            objToUpdate[key] = input.value;
+
+                            // Update the textarea with the stringified JSON
+                            updateJsonDisplay();
+                        };
+                        div.appendChild(input);
+                    }
+                    parentElement.appendChild(div);
+                });
+            } else {
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.value = data;
+                input.onchange = function () {
+                    let objToUpdate = jsonData;
+                    path.slice(0, -1).forEach((p) => { objToUpdate = objToUpdate[p]; });
+                    objToUpdate[path[path.length - 1]] = input.value;
+
+                    updateJsonDisplay();
+                };
+                parentElement.appendChild(input);
+            }
+        }
+
+        function updateJsonDisplay() {
+            document.getElementById('jsonInput').value = JSON.stringify(jsonData, null, 2);
+        }
+    </script>
+
+</body>
+
+</html>
