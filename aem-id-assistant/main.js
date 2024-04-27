@@ -113,7 +113,19 @@ function getAemUrls(aemID, appBaseUrl, deviceType, deviceTypeStatus) {
   const lastIndex = aemID.lastIndexOf("/");
   const id = aemID.slice(index, lastIndex);
   let result = {};
-
+  
+  if (!(aemID.includes("core-leads") && aemID.includes("retail"))) {
+    console.log("Error: ID does not contain 'core-leads' and 'retail'");
+    let errorElement = document.createElement("p");
+    let aemIdErrorTextElement = document.getElementById("error");
+    errorElement.innerText = "Error: ID does not contain 'core-leads' and 'retail'";
+    errorElement.style.color = "red";
+    errorElement.style.fontWeight = "bold";
+    errorElement.style.textAlign = "center";
+    aemIdErrorTextElement.appendChild(errorElement);
+    throw new Error("Invalid AEM ID");
+  }
+  
   if (deviceType === "app" && deviceTypeStatus === true) {
     const appBuildUrl = appBaseUrl + id;
     console.log("AEM APP Build Link", appBuildUrl);
@@ -137,8 +149,10 @@ function getAemUrls(aemID, appBaseUrl, deviceType, deviceTypeStatus) {
     const dkpMbrBuildUrlFolder = appDeployBaseUrl + id;
     console.log("Desktop and Mobile Browser AEM Folder link:", dkpMbrBuildUrl);
     result.dkpMbrBuildUrlFolder = dkpMbrBuildUrlFolder;
-  }
+    }
+  
   return result;
+
 }
 
 function resetPage() {
