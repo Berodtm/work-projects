@@ -6,25 +6,66 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
         }
 
         #output {
             margin-top: 20px;
-            white-space: pre-wrap;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ccc;
             font-size: 16px;
+            white-space: pre-wrap;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .json-key {
             font-weight: bold;
+            color: #155724;
         }
 
-        .hidden {
-            display: none;
-        }
-
-        input[type="text"] {
+        input[type="text"],
+        select {
             margin-top: 5px;
-            width: 400px;
+            width: 95%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            /* Include padding and border in the element's width */
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+            margin-right: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        div.object-item,
+        div.array-item {
+            margin-left: 20px;
+            border-left: 3px solid #007bff;
+            padding-left: 10px;
+            margin-bottom: 10px;
+        }
+
+        div.object-item {
+            background-color: #eef;
+        }
+
+        div.array-item {
+            background-color: #ffe;
         }
     </style>
 </head>
@@ -80,6 +121,25 @@
                     innerDiv.style.marginLeft = '20px';
                     createEditableFields(item, innerDiv, path.concat(index));
                     div.appendChild(innerDiv);
+
+                    // Adding Up/Down buttons for reordering within the array
+                    if (index > 0) {
+                        var upButton = document.createElement('button');
+                        upButton.textContent = 'Up';
+                        upButton.onclick = function () {
+                            moveItem(path, index, -1);
+                        };
+                        div.appendChild(upButton);
+                    }
+                    if (index < data.length - 1) {
+                        var downButton = document.createElement('button');
+                        downButton.textContent = 'Down';
+                        downButton.onclick = function () {
+                            moveItem(path, index, 1);
+                        };
+                        div.appendChild(downButton);
+                    }
+
                     parentElement.appendChild(div);
                 });
             } else if (typeof data === 'object' && data !== null) {
@@ -96,13 +156,8 @@
                         input.type = 'text';
                         input.value = data[key];
                         input.onchange = function () {
-                            // Find the object to update using the path, and update the key with the new value
-                            let objToUpdate = jsonData;
-                            path.forEach((p) => { objToUpdate = objToUpdate[p]; });
-                            objToUpdate[key] = input.value;
-
-                            // Update the textarea with the stringified JSON
-                            updateJsonDisplay();
+                            // Update the value at the specified path
+                            setValueAt(path.concat(key), input.value);
                         };
                         div.appendChild(input);
                     }
@@ -113,15 +168,37 @@
                 input.type = 'text';
                 input.value = data;
                 input.onchange = function () {
-                    let objToUpdate = jsonData;
-                    path.slice(0, -1).forEach((p) => { objToUpdate = objToUpdate[p]; });
-                    objToUpdate[path[path.length - 1]] = input.value;
-
-                    updateJsonDisplay();
+                    setValueAt(path, input.value);
                 };
                 parentElement.appendChild(input);
             }
         }
+
+        function moveItem(path, index, direction) {
+            let arr = getValueAt(path); // Retrieve the array from the JSON data using the path
+            if (!arr || index + direction < 0 || index + direction >= arr.length) {
+                return; // Check bounds and existence
+            }
+
+            // Move the item within the array
+            let item = arr.splice(index, 1)[0];
+            arr.splice(index + direction, 0, item);
+
+            updateJsonDisplay(); // Update the textarea to show the new JSON
+            displayJson(); // Refresh the UI to reflect the updated array
+        }
+
+        function getValueAt(path) {
+            let obj = jsonData;
+            for (let i = 0; i < path.length; i++) {
+                obj = obj[path[i]];
+                if (obj === undefined) {
+                    return undefined; // Return undefined if the path is invalid
+                }
+            }
+            return obj;
+        }
+
 
         function updateJsonDisplay() {
             document.getElementById('jsonInput').value = JSON.stringify(jsonData, null, 2);
