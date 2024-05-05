@@ -15,7 +15,7 @@ A utility designed for generating unique IDs required in AEM (Adobe Experience M
 - **Live Demo**: [OPS AEM ID Generator](https://berodtm.github.io/work-projects-lbg/ops-aem-id-gen/)
 
 ### AEM ID Assistant
-This tool assists in managing and creating content in AEM, providing a user-friendly interface to create, and manage assets that are used across various AEM assets and components. A Live check via API is also included
+This tool assists in managing and creating content in AEM, providing a user-friendly interface to create, and manage assets that are used across various AEM assets and components. A Live check via API is also included.
 
 - **Live Demo**: [AEM ID Assistant](https://berodtm.github.io/work-projects-lbg/aem-id-assistant/)
 
