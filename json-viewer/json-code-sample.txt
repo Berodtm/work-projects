@@ -1,0 +1,80 @@
+{
+  "data": {
+    "products": [
+      {
+        "title": "Loans & Car Finance",
+        "orderID": 1,
+        "iconID": 3,
+        "items": [
+          {
+            "title": "Loan Calculator",
+            "secureUrl": "https://www.exampleurl.com/calculator",
+            "orderID": 1,
+            "tag": "tagref111",
+            "platform": "both"
+          },
+          {
+            "title": "Borrow More",
+            "secureUrl": "https://www.exampleurl.com/borrow",
+            "orderID": 2,
+            "tag": "tagref112",
+            "platform": "both"
+          }
+        ]
+      },
+      {
+        "title": "Savings",
+        "orderID": 2,
+        "iconID": 5,
+        "items": [
+          {
+            "title": "Savings Calculator",
+            "secureUrl": "https://www.exampleurl.com/savings-calculator",
+            "orderID": 1,
+            "tag": "tagref121",
+            "platform": "web"
+          },
+          {
+            "title": "Start Saving",
+            "secureUrl": "https://www.exampleurl.com/start-saving",
+            "orderID": 2,
+            "tag": "tagref122",
+            "platform": "mobile"
+          }
+        ]
+      },
+      {
+        "title": "Mortgages",
+        "orderID": 3,
+        "iconID": 7,
+        "items": [
+          {
+            "title": "Mortgage Rates",
+            "secureUrl": "https://www.exampleurl.com/mortgage-rates",
+            "orderID": 1,
+            "tag": "tagref131",
+            "platform": "both"
+          },
+          {
+            "title": "Mortgage Calculator",
+            "secureUrl": "https://www.exampleurl.com/mortgage-calculator",
+            "orderID": 2,
+            "tag": "tagref132",
+            "platform": "web"
+          },
+          {
+            "title": "Apply for a Mortgage",
+            "secureUrl": "https://www.exampleurl.com/apply-mortgage",
+            "orderID": 3,
+            "tag": "tagref133",
+            "platform": "mobile",
+            "details": {
+              "requiredDocuments": ["ID", "Bank Statements", "Proof of Income"],
+              "processTime": "2 weeks"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
