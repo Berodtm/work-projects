@@ -94,10 +94,17 @@
         // Declare jsonData as a global variable to hold the parsed JSON
         var jsonData = {};
 
+        function encodeAmpersands(jsonString) {
+            // This regex looks for '&' that are not already part of '&amp;'
+            return jsonString.replace(/&(?!amp;)/g, '&amp;');
+        }
+
         function displayJson() {
             var jsonInput = document.getElementById('jsonInput').value;
+            var encodedJson = encodeAmpersands(jsonInput); // Encode ampersands correctly before processing
             try {
-                jsonData = JSON.parse(jsonInput); // Parse JSON input and store in the global variable
+                jsonData = JSON.parse(encodedJson); // Parse JSON input and store in the global variable
+                document.getElementById('jsonInput').value = encodedJson; // Update the textarea with encoded JSON
                 var outputDiv = document.getElementById('output');
                 outputDiv.innerHTML = ''; // Clear previous output
                 createEditableFields(jsonData, outputDiv); // Generate new editable fields
@@ -111,7 +118,17 @@
                 document.getElementById('output').innerText = 'Invalid JSON!';
             }
         }
-
+        function setValueAt(path, value) {
+            let obj = jsonData;
+            for (let i = 0; i < path.length - 1; i++) {
+                obj = obj[path[i]];
+                if (obj === undefined) {
+                    return; // Path invalid
+                }
+            }
+            obj[path[path.length - 1]] = value; // Set the new value
+            updateJsonDisplay(); // Reflect changes in the textarea
+        }
         function createEditableFields(data, parentElement, path = []) {
             if (Array.isArray(data)) {
                 data.forEach((item, index) => {
@@ -259,13 +276,16 @@
         function populateProductDropdown() {
             var select = document.getElementById('productSelect');
             select.innerHTML = ''; // Clear existing options
-            jsonData.data.products.forEach(function (product, index) {
-                var option = document.createElement('option');
-                option.value = index;
-                option.textContent = product.title;
-                select.appendChild(option);
-            });
+            if (jsonData.data && jsonData.data.products) {
+                jsonData.data.products.forEach(function (product, index) {
+                    var option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = product.title;
+                    select.appendChild(option);
+                });
+            }
         }
+
 
         // Updated to check if 'items' exists when populating item dropdown
         function populateItemDropdown() {
