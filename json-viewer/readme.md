@@ -23,5 +23,3 @@ If you need sample data to see how the tool works or to test its capabilities, c
 
 This tool is ideal for developers working with JSON data structures who need a quick way to visualize and manipulate data without writing any code.
 
-For any questions or additional information, please refer to the [GitHub repository](https://github.com/Berodtm/work-projects-lbg/blob/main/json-viewer/).
-
