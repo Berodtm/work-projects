@@ -15,6 +15,10 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
+        span {
+            margin-top: 20px;
+        }
+
         #output {
             margin-top: 20px;
             padding: 10px;
@@ -86,6 +90,7 @@
             height: 100vh;
             overflow-y: auto;
         }
+
         #jsonInput {
             width: 90%;
         }
@@ -117,7 +122,7 @@
 
     <script>
         // Declare jsonData as a global variable to hold the parsed JSON
-        var jsonData = {};
+        let jsonData = {};
 
         function encodeAmpersands(jsonString) {
             // This regex looks for '&' that are not already part of '&amp;'
@@ -125,14 +130,15 @@
         }
 
         function displayJson() {
-            var jsonInput = document.getElementById('jsonInput').value;
-            var encodedJson = encodeAmpersands(jsonInput); // Encode ampersands correctly before processing
+            let jsonInput = document.getElementById('jsonInput').value;
+            let encodedJson = encodeAmpersands(jsonInput); // Encode ampersands correctly before processing
             try {
                 jsonData = JSON.parse(encodedJson); // Parse JSON input and store in the global variable
                 document.getElementById('jsonInput').value = encodedJson; // Update the textarea with encoded JSON
-                var outputDiv = document.getElementById('output');
+                let outputDiv = document.getElementById('output');
                 outputDiv.innerHTML = ''; // Clear previous output
                 createEditableFields(jsonData, outputDiv); // Generate new editable fields
+
 
                 // Populate dropdowns if products exist
                 if (jsonData && jsonData.data && jsonData.data.products) {
@@ -143,6 +149,7 @@
             } catch (e) {
                 document.getElementById('output').innerText = 'Invalid JSON!';
             }
+            console.log(jsonData)
         }
         function setValueAt(path, value) {
             let obj = jsonData;
@@ -154,52 +161,91 @@
             }
             obj[path[path.length - 1]] = value; // Set the new value
             updateJsonDisplay(); // Reflect changes in the textarea
+            updatePreview();
         }
         function createEditableFields(data, parentElement, path = []) {
             if (Array.isArray(data)) {
                 data.forEach((item, index) => {
-                    var div = document.createElement('div');
-                    div.innerHTML = `<span class="json-key">Item ${index + 1}:</span>`;
-                    var innerDiv = document.createElement('div');
-                    innerDiv.style.marginLeft = '20px';
-                    createEditableFields(item, innerDiv, path.concat(index));
-                    div.appendChild(innerDiv);
+                    // Use the title property if available, otherwise default to "Item <index + 1>"
+                    let title = item.title ? item.title : `Item ${index + 1}`;
 
-                    // Adding Up/Down buttons for reordering within the array
+                    let div = document.createElement('div');
+                    div.style.border = '1px solid black'; // Adds a border around each item for clarity
+                    div.style.padding = '10px'; // Adds padding inside the border
+                    div.style.marginBottom = '10px'; // Adds margin below each item
+
+                    // Creating a container for buttons and the label
+                    let buttonDiv = document.createElement('div');
+                    buttonDiv.style.textAlign = 'center'; // Centering buttons and the label
+
+                    // Adding "Move Up" button
                     if (index > 0) {
-                        var upButton = document.createElement('button');
-                        upButton.textContent = 'Up';
+                        let upButton = document.createElement('button');
+                        upButton.textContent = `Move Up: ${title}`;
                         upButton.onclick = function () {
                             moveItem(path, index, -1);
                         };
-                        div.appendChild(upButton);
+                        buttonDiv.appendChild(upButton);
                     }
+
+                    // Adding "Move Down" button
                     if (index < data.length - 1) {
-                        var downButton = document.createElement('button');
-                        downButton.textContent = 'Down';
+                        let downButton = document.createElement('button');
+                        downButton.textContent = `Move Down: ${title}`;
                         downButton.onclick = function () {
                             moveItem(path, index, 1);
                         };
-                        div.appendChild(downButton);
+                        buttonDiv.appendChild(downButton);
                     }
+
+                    // Adding "Delete" button
+                    let deleteButton = document.createElement('button');
+                    deleteButton.textContent = `Delete ${title}`;
+                    deleteButton.onclick = function () {
+                        deleteItem(path, index);
+                    };
+                    buttonDiv.appendChild(deleteButton);
+
+                    // Adding "Duplicate" button
+                    let duplicateButton = document.createElement('button');
+                    duplicateButton.textContent = `Duplicate ${title}`;
+                    duplicateButton.onclick = function () {
+                        duplicateItem(path, index);
+                    };
+                    buttonDiv.appendChild(duplicateButton);
+
+                    div.appendChild(buttonDiv); // Add buttons at the top
+
+                    // Adding a label that indicates the current item's title
+                    let label = document.createElement('span');
+                    label.className = "json-key";
+                    label.innerHTML = `Item ${index + 1}: ${title}`;
+                    label.style.display = 'block'; // Makes sure the label is on its own line
+                    label.style.textAlign = 'center'; // Center the label
+                    div.appendChild(label);
+
+                    // Creating an inner div for nested objects or editable fields
+                    let innerDiv = document.createElement('div');
+                    innerDiv.style.margin = '50px 100px 100px 100px';
+                    createEditableFields(item, innerDiv, path.concat(index));
+                    div.appendChild(innerDiv);
 
                     parentElement.appendChild(div);
                 });
             } else if (typeof data === 'object' && data !== null) {
                 Object.keys(data).forEach((key) => {
-                    var div = document.createElement('div');
-                    var span = document.createElement('span');
+                    let div = document.createElement('div');
+                    let span = document.createElement('span');
                     span.textContent = key + ': ';
                     div.appendChild(span);
 
                     if (typeof data[key] === 'object' && data[key] !== null) {
                         createEditableFields(data[key], div, path.concat(key));
                     } else {
-                        var input = document.createElement('input');
+                        let input = document.createElement('input');
                         input.type = 'text';
                         input.value = data[key];
                         input.onchange = function () {
-                            // Update the value at the specified path
                             setValueAt(path.concat(key), input.value);
                         };
                         div.appendChild(input);
@@ -207,15 +253,42 @@
                     parentElement.appendChild(div);
                 });
             } else {
-                var input = document.createElement('input');
+                let input = document.createElement('input');
                 input.type = 'text';
                 input.value = data;
                 input.onchange = function () {
                     setValueAt(path, input.value);
+                    updateJsonDisplay(); // Reflect changes in the JSON textarea
+                    updatePreview(); // Update the preview dynamically
                 };
                 parentElement.appendChild(input);
             }
         }
+
+        function duplicateItem(path, index) {
+            let arr = getValueAt(path); // Retrieve the array from the JSON data using the path
+            if (arr && index >= 0 && index < arr.length) {
+                let newItem = JSON.parse(JSON.stringify(arr[index])); // Deep copy the item
+                arr.splice(index + 1, 0, newItem); // Insert the copied item next to the original
+
+                updateJsonDisplay(); // Update the textarea to reflect the new JSON data
+                displayJson(); // Refresh the UI to include changes
+            }
+        }
+
+
+        function deleteItem(path, index) {
+            let arr = getValueAt(path); // Retrieve the array from the JSON data using the path
+            if (arr && index >= 0 && index < arr.length) {
+                arr.splice(index, 1); // Remove the item at the specified index
+
+                updateJsonDisplay(); // Update the textarea to reflect the new JSON data
+                displayJson(); // Refresh the UI to include changes
+            }
+        }
+
+
+
 
         function moveItem(path, index, direction) {
             let arr = getValueAt(path); // Retrieve the array from the JSON data using the path
@@ -248,30 +321,30 @@
         }
 
         function addObjectToSelectedProduct() {
-            var productIndex = document.getElementById('productSelect').value;
-            var productTitle = jsonData.data.products[productIndex].title;
+            let productIndex = document.getElementById('productSelect').value;
+            let productTitle = jsonData.data.products[productIndex].title;
             addNewObjectToCategory(productTitle);
         }
 
         function addNewObjectToCategory(categoryTitle) {
             // Prompt user for the number of key/value pairs they want to add
-            var numberOfPairs = parseInt(prompt("How many key/value pairs would you like to add?"));
+            let numberOfPairs = parseInt(prompt("How many key/value pairs would you like to add?"));
             if (isNaN(numberOfPairs) || numberOfPairs <= 0) {
                 alert("Please enter a valid number greater than 0.");
                 return; // Exit if the number is not valid
             }
 
             // Create new item object
-            var newItem = {};
+            let newItem = {};
 
             // Loop through the number of pairs and prompt for each key and value
-            for (var i = 0; i < numberOfPairs; i++) {
-                var key = prompt("Enter key " + (i + 1) + ":");
+            for (let i = 0; i < numberOfPairs; i++) {
+                let key = prompt("Enter key " + (i + 1) + ":");
                 if (!key) {
                     alert("Key cannot be empty. Restarting process.");
                     return; // Exit if no key is provided
                 }
-                var value = prompt("Enter value for " + key + ":");
+                let value = prompt("Enter value for " + key + ":");
                 if (value === null) {
                     alert("Process cancelled.");
                     return; // Exit if user cancels the value prompt
@@ -280,7 +353,7 @@
             }
 
             // Find the category in jsonData
-            var category = jsonData.data.products.find(function (product) {
+            let category = jsonData.data.products.find(function (product) {
                 return product.title === categoryTitle;
             });
 
@@ -300,11 +373,11 @@
             }
         }
         function populateProductDropdown() {
-            var select = document.getElementById('productSelect');
+            let select = document.getElementById('productSelect');
             select.innerHTML = ''; // Clear existing options
             if (jsonData.data && jsonData.data.products) {
                 jsonData.data.products.forEach(function (product, index) {
-                    var option = document.createElement('option');
+                    let option = document.createElement('option');
                     option.value = index;
                     option.textContent = product.title;
                     select.appendChild(option);
@@ -315,17 +388,17 @@
 
         // Updated to check if 'items' exists when populating item dropdown
         function populateItemDropdown() {
-            var productIndex = document.getElementById('productSelect').value;
-            var select = document.getElementById('itemSelect');
+            let productIndex = document.getElementById('productSelect').value;
+            let select = document.getElementById('itemSelect');
             select.innerHTML = ''; // Clear existing options
 
             if (!jsonData.data.products[productIndex].items) {
                 jsonData.data.products[productIndex].items = []; // Initialize if not exist
             }
 
-            var items = jsonData.data.products[productIndex].items;
+            let items = jsonData.data.products[productIndex].items;
             items.forEach(function (item, index) {
-                var option = document.createElement('option');
+                let option = document.createElement('option');
                 option.value = index;
                 option.textContent = item.title || "Item " + index;
                 select.appendChild(option);
@@ -334,8 +407,8 @@
 
         // Ensuring that removeSelectedItem checks if items exist
         function removeSelectedItem() {
-            var productIndex = document.getElementById('productSelect').value;
-            var itemIndex = document.getElementById('itemSelect').value;
+            let productIndex = document.getElementById('productSelect').value;
+            let itemIndex = document.getElementById('itemSelect').value;
 
             if (!jsonData.data.products[productIndex].items) {
                 alert("No items to remove.");
@@ -352,21 +425,20 @@
 
 
         function updatePreview() {
-            var preview = document.getElementById('previewContent');
+            let preview = document.getElementById('previewContent');
             preview.innerHTML = ''; // Clear previous content
 
             if (jsonData && jsonData.data && jsonData.data.products) {
                 jsonData.data.products.forEach(function (product) {
-                    var productDiv = document.createElement('div');
+                    let productDiv = document.createElement('div');
                     productDiv.textContent = product.title;
                     productDiv.style.padding = '5px 0';
                     productDiv.style.fontWeight = 'bold';
 
-                    // Check if there are sub-products and display them
                     if (product.items && product.items.length > 0) {
-                        var itemList = document.createElement('ul');
+                        let itemList = document.createElement('ul');
                         product.items.forEach(function (item) {
-                            var itemLi = document.createElement('li');
+                            let itemLi = document.createElement('li');
                             itemLi.textContent = item.title;
                             itemList.appendChild(itemLi);
                         });
@@ -381,8 +453,11 @@
         }
 
 
+
+
         // Call this function on initial load and after updates
         populateProductDropdown();
+
 
 
 
