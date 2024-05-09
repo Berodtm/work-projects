@@ -12,21 +12,25 @@
             /* Adds space between the columns */
             padding: 20px;
             /* Maintains padding around the entire layout */
-            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(to right, #00863B 60%, #00863B 60%, #BCCF00 100%);
+            font-family: "Poppins", Arial, sans-serif;
         }
-
+        .main-header, .intro-text {
+            color: #494848;
+        }
         span {
             margin-top: 20px;
         }
 
         #output {
             margin-top: 20px;
-            padding: 10px;
+            padding: 30px;
             background: #fff;
             border: 1px solid #ccc;
             font-size: 16px;
             white-space: pre-wrap;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
         }
 
         .json-key {
@@ -36,15 +40,22 @@
 
         input[type="text"],
         select {
-            margin-top: 5px;
-            width: 95%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
+            height: 50px;
             /* Include padding and border in the element's width */
         }
-
+        select option {
+            padding: 20px 20px;
+            margin: 20px;
+            font-size: 20px;
+            
+        }
         button {
             background-color: #007bff;
             color: white;
@@ -84,15 +95,33 @@
             position: sticky;
             top: 20px;
             /* Stick to the top 20px offset */
+            
+            padding: 50px;
+
+        }
+        #preview h2 {
+            color: #fff;
+        }
+        #previewContent {
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 10px;
         }
 
         .textarea-container {
             height: 100vh;
             overflow-y: auto;
+            background-color: #f3f3f3;
+            padding: 50px;
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
 
         #jsonInput {
-            width: 90%;
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #b6b5b5;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -100,9 +129,10 @@
 <body>
 
     <body>
+        
         <div class="textarea-container">
-            <h1>JSON Editor</h1>
-            <p>Insert JSON and press Load JSON to populate the tool.</p>
+            <h1 class="main-header">JSON Editor</h1>
+            <p class="intro-text">Insert JSON and press Load JSON to populate the tool. Making edits to via the interface will update both the JSON and Live Preview. </p>
             <textarea id="jsonInput" rows="10" cols="50"></textarea><br>
             <button onclick="displayJson()">Load JSON</button><br>
             <select id="productSelect" onchange="populateItemDropdown()"></select>
@@ -173,6 +203,8 @@
                     div.style.border = '1px solid black'; // Adds a border around each item for clarity
                     div.style.padding = '10px'; // Adds padding inside the border
                     div.style.marginBottom = '10px'; // Adds margin below each item
+                    div.style.borderRadius = '5px';
+                    div.style.margin = '10px';
 
                     // Creating a container for buttons and the label
                     let buttonDiv = document.createElement('div');
@@ -219,7 +251,7 @@
                     // Adding a label that indicates the current item's title
                     let label = document.createElement('span');
                     label.className = "json-key";
-                    label.innerHTML = `Item ${index + 1}: ${title}`;
+                    label.innerHTML = `<h2>Item ${index + 1}: ${title}</h2>`;
                     label.style.display = 'block'; // Makes sure the label is on its own line
                     label.style.textAlign = 'center'; // Center the label
                     div.appendChild(label);
