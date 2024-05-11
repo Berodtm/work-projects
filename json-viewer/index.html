@@ -7,11 +7,8 @@
         body {
             display: grid;
             grid-template-columns: 60% 40%;
-            /* 60% width for editor, 40% for preview */
             gap: 20px;
-            /* Adds space between the columns */
             padding: 20px;
-            /* Maintains padding around the entire layout */
             background: linear-gradient(to right, #00863B 60%, #00863B 60%, #BCCF00 100%);
             font-family: "Poppins", Arial, sans-serif;
         }
@@ -51,14 +48,12 @@
             border-radius: 4px;
             box-sizing: border-box;
             height: 50px;
-            /* Include padding and border in the element's width */
         }
 
         select option {
             padding: 20px 20px;
             margin: 20px;
             font-size: 20px;
-
         }
 
         button {
@@ -94,15 +89,10 @@
 
         #preview {
             height: 100vh;
-            /* Full viewport height */
             overflow-y: auto;
-            /* Allows scrolling within the preview column */
             position: sticky;
             top: 20px;
-            /* Stick to the top 20px offset */
-
             padding: 50px;
-
         }
 
         #preview h2 {
@@ -130,7 +120,6 @@
             border: 1px solid #b6b5b5;
             margin-bottom: 15px;
         }
-
 
         /* Flex layout for key-value pairs */
         .kv-pair {
@@ -189,93 +178,129 @@
         .item-buttons button {
             margin: 5px;
             flex: 0 1 auto;
-            /* Ensure buttons are inline */
         }
     </style>
 </head>
 
 <body>
+    <div class="textarea-container">
+        <h1 class="main-header">JSON Editor</h1>
+        <p class="intro-text">Insert JSON and press Load JSON to populate the tool. Making edits to via the interface
+            will update both the JSON and Live Preview. </p>
+        <textarea id="jsonInput" rows="10" cols="50"></textarea><br>
+        <button onclick="displayJson()">Load JSON</button><br>
+        <select id="productSelect" onchange="populateItemDropdown()"></select>
+        <button onclick="addObjectToSelectedProduct()">Add Object to Selected Product</button><br>
+        <select id="itemSelect"></select>
+        <button onclick="removeSelectedItem()">Remove Selected Item</button>
+        <div id="output"></div>
+    </div>
 
-    <body>
-
-        <div class="textarea-container">
-            <h1 class="main-header">JSON Editor</h1>
-            <p class="intro-text">Insert JSON and press Load JSON to populate the tool. Making edits to via the
-                interface will update both the JSON and Live Preview. </p>
-            <textarea id="jsonInput" rows="10" cols="50"></textarea><br>
-            <button onclick="displayJson()">Load JSON</button><br>
-            <select id="productSelect" onchange="populateItemDropdown()"></select>
-            <button onclick="addObjectToSelectedProduct()">Add Object to Selected Product</button><br>
-            <select id="itemSelect"></select>
-            <button onclick="removeSelectedItem()">Remove Selected Item</button>
-            <div id="output"></div>
-        </div>
-
-        <div id="preview">
-            <h2>Live Preview</h2>
-            <div id="previewContent"></div>
-        </div>
-    </body>
-
-
+    <div id="preview">
+        <h2>Live Preview</h2>
+        <div id="previewContent"></div>
+    </div>
 
     <script>
-        // Declare jsonData as a global variable to hold the parsed JSON
         let jsonData = {};
 
         function encodeAmpersands(jsonString) {
-            // This regex looks for '&' that are not already part of '&amp;'
             return jsonString.replace(/&(?!amp;)/g, '&amp;');
         }
 
-        function displayJson() {
-            let jsonInput = document.getElementById('jsonInput').value;
-            let encodedJson = encodeAmpersands(jsonInput); // Encode ampersands correctly before processing
+        function decodeAmpersands(text) {
+            return typeof text === 'string' ? text.replace(/&amp;/g, '&') : text;
+        }
+
+        function readAndEncodeJson(inputId) {
+            const jsonInput = document.getElementById(inputId).value;
+            return encodeAmpersands(jsonInput);
+        }
+
+        function parseJson(jsonString) {
             try {
-                jsonData = JSON.parse(encodedJson); // Parse JSON input and store in the global variable
-                document.getElementById('jsonInput').value = encodedJson; // Update the textarea with encoded JSON
-                let outputDiv = document.getElementById('output');
-                outputDiv.innerHTML = ''; // Clear previous output
-                createEditableFields(jsonData, outputDiv); // Generate new editable fields
-
-
-                // Populate dropdowns if products exist
-                if (jsonData && jsonData.data && jsonData.data.products) {
-                    populateProductDropdown(); // This should only be called here to ensure data is loaded
-                    populateItemDropdown(); // Populate items for the first product by default
-                    updatePreview(); // Update the preview display
-                }
+                return JSON.parse(jsonString);
             } catch (e) {
+                console.error("Invalid JSON:", e);
+                return null;
+            }
+        }
+
+        function updateTextarea(textareaId, text) {
+            document.getElementById(textareaId).value = text;
+        }
+
+        function clearElementHtml(element) {
+            element.innerHTML = '';
+        }
+
+        function updateUi(jsonData, outputId) {
+            const outputDiv = document.getElementById(outputId);
+            clearElementHtml(outputDiv);
+            createEditableFields(jsonData, outputDiv);
+            if (jsonData && jsonData.data && jsonData.data.products) {
+                populateProductDropdown();
+                populateItemDropdown();
+                updatePreview();
+            }
+        }
+
+        function displayJson() {
+            const encodedJson = readAndEncodeJson('jsonInput');
+            jsonData = parseJson(encodedJson);
+
+            if (jsonData) {
+                updateTextarea('jsonInput', encodedJson);
+                updateUi(jsonData, 'output');
+            } else {
                 document.getElementById('output').innerText = 'Invalid JSON!';
             }
-            console.log(jsonData)
+            console.log(jsonData);
         }
+
         function setValueAt(path, value) {
+            const encodedValue = encodeAmpersands(value);
+
             let obj = jsonData;
             for (let i = 0; i < path.length - 1; i++) {
                 obj = obj[path[i]];
                 if (obj === undefined) {
-                    return; // Path invalid
+                    return;
                 }
             }
-            obj[path[path.length - 1]] = value; // Set the new value
-            updateJsonDisplay(); // Reflect changes in the textarea
+            obj[path[path.length - 1]] = encodedValue;
+
+            updateJsonDisplay();
             updatePreview();
+        }
+
+        function addBlurListenerAndUpdateField(input, path, key) {
+            input.addEventListener('blur', function () {
+                const newValue = input.value;
+                const encodedValue = encodeAmpersands(newValue);
+
+                if (newValue !== encodedValue) {
+                    input.value = encodedValue;
+                }
+
+                setValueAt(path.concat(key), encodedValue);
+                displayJson();
+            });
         }
 
         function createEditableFields(data, parentElement, path = []) {
             if (Array.isArray(data)) {
                 data.forEach((item, index) => {
-                    let title = item.title ? item.title : `Item ${index + 1}`;
+                    const title = item.title ? item.title : `Item ${index + 1}`;
 
-                    let div = document.createElement('div');
-                    div.className = 'item-container'; // Use item-container class
+                    const div = document.createElement('div');
+                    div.className = 'item-container';
 
-                    let buttonDiv = document.createElement('div');
-                    buttonDiv.className = 'item-buttons'; // Use item-buttons class
+                    const buttonDiv = document.createElement('div');
+                    buttonDiv.className = 'item-buttons';
 
                     if (index > 0) {
-                        let upButton = document.createElement('button');
+                        const upButton = document.createElement('button');
                         upButton.textContent = `Move Up: ${title}`;
                         upButton.onclick = function () {
                             moveItem(path, index, -1);
@@ -284,7 +309,7 @@
                     }
 
                     if (index < data.length - 1) {
-                        let downButton = document.createElement('button');
+                        const downButton = document.createElement('button');
                         downButton.textContent = `Move Down: ${title}`;
                         downButton.onclick = function () {
                             moveItem(path, index, 1);
@@ -292,21 +317,21 @@
                         buttonDiv.appendChild(downButton);
                     }
 
-                    let deleteButton = document.createElement('button');
+                    const deleteButton = document.createElement('button');
                     deleteButton.textContent = `Delete ${title}`;
                     deleteButton.onclick = function () {
                         deleteItem(path, index);
                     };
                     buttonDiv.appendChild(deleteButton);
 
-                    let duplicateButton = document.createElement('button');
+                    const duplicateButton = document.createElement('button');
                     duplicateButton.textContent = `Duplicate ${title}`;
                     duplicateButton.onclick = function () {
                         duplicateItem(path, index);
                     };
                     buttonDiv.appendChild(duplicateButton);
 
-                    let addKeyValueButton = document.createElement('button');
+                    const addKeyValueButton = document.createElement('button');
                     addKeyValueButton.textContent = `Add Key-Value to ${title}`;
                     addKeyValueButton.onclick = function () {
                         addKeyValuePairToObject(path, index);
@@ -315,14 +340,14 @@
 
                     div.appendChild(buttonDiv);
 
-                    let label = document.createElement('span');
+                    const label = document.createElement('span');
                     label.className = "json-key";
                     label.innerHTML = `<h2>Item ${index + 1}: ${title}</h2>`;
                     label.style.display = 'block';
                     label.style.textAlign = 'center';
                     div.appendChild(label);
 
-                    let innerDiv = document.createElement('div');
+                    const innerDiv = document.createElement('div');
                     innerDiv.style.margin = '10px 20px';
                     createEditableFields(item, innerDiv, path.concat(index));
                     div.appendChild(innerDiv);
@@ -331,35 +356,33 @@
                 });
             } else if (typeof data === 'object' && data !== null) {
                 Object.keys(data).forEach((key) => {
-                    // Skip keys like 'data', 'products', 'items'
                     if (['data', 'products', 'items'].includes(key)) {
                         createEditableFields(data[key], parentElement, path.concat(key));
                     } else {
-                        let div = document.createElement('div');
-                        div.className = 'kv-pair'; // Add flexbox class
+                        const div = document.createElement('div');
+                        div.className = 'kv-pair';
 
-                        let span = document.createElement('span');
+                        const span = document.createElement('span');
                         span.textContent = key + ': ';
                         div.appendChild(span);
 
                         if (typeof data[key] === 'object' && data[key] !== null) {
-                            // Create nested structure for objects or arrays
-                            let nestedDiv = document.createElement('div');
-                            nestedDiv.style.marginLeft = '20px'; // Indent nested objects
+                            const nestedDiv = document.createElement('div');
+                            nestedDiv.style.marginLeft = '20px';
                             createEditableFields(data[key], nestedDiv, path.concat(key));
                             div.appendChild(nestedDiv);
                         } else {
-                            let input = document.createElement('input');
+                            const input = document.createElement('input');
                             input.type = 'text';
-                            input.value = data[key];
-                            input.onchange = function () {
-                                setValueAt(path.concat(key), input.value);
-                            };
+                            input.value = encodeAmpersands(data[key].toString());
+
+                            addBlurListenerAndUpdateField(input, path, key);
+
                             div.appendChild(input);
 
-                            let deleteButton = document.createElement('button');
+                            const deleteButton = document.createElement('button');
                             deleteButton.textContent = 'Delete';
-                            deleteButton.className = 'delete-button'; // Add delete button class
+                            deleteButton.className = 'delete-button';
                             deleteButton.onclick = function () {
                                 removeKeyValue(path, key);
                             };
@@ -369,102 +392,93 @@
                     }
                 });
             } else {
-                let input = document.createElement('input');
+                const input = document.createElement('input');
                 input.type = 'text';
-                input.value = data;
-                input.onchange = function () {
-                    setValueAt(path, input.value);
-                    updateJsonDisplay();
-                    updatePreview();
-                };
+                input.value = encodeAmpersands(data.toString());
+
+                addBlurListenerAndUpdateField(input, path);
+
                 parentElement.appendChild(input);
             }
         }
 
-        // Helper function to remove a key-value pair
+        function addKeyValuePairToObject(path, index) {
+            console.log("addKeyValuePairToObject called with path:", path, "and index:", index);
+
+            // Get the specific object where the new key-value pair will be added
+            let obj = getValueAt(path.concat(index));
+            console.log("Target object to add key-value:", obj);
+
+            if (obj && typeof obj === 'object') {
+                let key = prompt("Enter new key:");
+                if (!key) {
+                    alert("Key cannot be empty.");
+                    return;
+                }
+                let value = prompt("Enter value for " + key + ":");
+                if (value === null) {
+                    alert("Process cancelled.");
+                    return;
+                }
+                obj[key] = encodeAmpersands(value); // Encode ampersands in the new value
+
+                updateJsonDisplay(); // Update the JSON textarea
+                displayJson(); // Refresh the UI
+            } else {
+                console.error("Target object is not valid for adding key-value pair");
+            }
+        }
+
+
         function removeKeyValue(path, key) {
-            let target = getValueAt(path);
-            if (target && typeof target === 'object' && key in target) {
-                delete target[key];
+            console.log("removeKeyValue called with path:", path, "and key:", key);
+
+            const parentPath = path;
+            const obj = getValueAt(parentPath);
+            console.log("Object at path:", parentPath, obj);
+
+            if (obj && obj.hasOwnProperty(key)) {
+                console.log(`Deleting key "${key}" from`, obj);
+                delete obj[key];
                 updateJsonDisplay();
                 displayJson();
             } else {
-                alert('Key not found or invalid path.');
+                console.error("Key not found or object is undefined");
             }
-        }
-
-
-
-
-        function addKeyValuePairToObject(path, index) {
-            // Get the array or object at the specified path
-            let target = getValueAt(path);
-
-            // Ensure the target is an object or array
-            if (Array.isArray(target) && target[index]) {
-                target = target[index];
-            } else {
-                alert("Invalid selection or path.");
-                return;
-            }
-
-            // Prompt the user for the new key-value pair
-            let newKey = prompt("Enter the new key:");
-            if (!newKey) {
-                alert("Key cannot be empty.");
-                return;
-            }
-            let newValue = prompt(`Enter the value for "${newKey}":`);
-            if (newValue === null) {
-                alert("Operation canceled.");
-                return;
-            }
-
-            // Add the new key-value pair to the target object
-            target[newKey] = newValue;
-
-            // Update the JSON display
-            updateJsonDisplay();
-            displayJson();
         }
 
         function duplicateItem(path, index) {
-            let arr = getValueAt(path); // Retrieve the array from the JSON data using the path
+            const arr = getValueAt(path);
             if (arr && index >= 0 && index < arr.length) {
-                let newItem = JSON.parse(JSON.stringify(arr[index])); // Deep copy the item
-                arr.splice(index + 1, 0, newItem); // Insert the copied item next to the original
+                const newItem = JSON.parse(JSON.stringify(arr[index]));
+                arr.splice(index + 1, 0, newItem);
 
-                updateJsonDisplay(); // Update the textarea to reflect the new JSON data
-                displayJson(); // Refresh the UI to include changes
+                updateJsonDisplay();
+                displayJson();
             }
         }
-
 
         function deleteItem(path, index) {
-            let arr = getValueAt(path); // Retrieve the array from the JSON data using the path
+            const arr = getValueAt(path);
             if (arr && index >= 0 && index < arr.length) {
-                arr.splice(index, 1); // Remove the item at the specified index
+                arr.splice(index, 1);
 
-                updateJsonDisplay(); // Update the textarea to reflect the new JSON data
-                displayJson(); // Refresh the UI to include changes
+                updateJsonDisplay();
+                displayJson();
             }
         }
 
-
-
-
         function moveItem(path, index, direction) {
-            let arr = getValueAt(path); // Retrieve the array from the JSON data using the path
+            const arr = getValueAt(path);
             if (!arr || index + direction < 0 || index + direction >= arr.length) {
-                return; // Check bounds and existence
+                return;
             }
 
-            // Move the item within the array
-            let item = arr.splice(index, 1)[0];
+            const item = arr.splice(index, 1)[0];
             arr.splice(index + direction, 0, item);
 
-            updateJsonDisplay(); // Update the textarea to show the new JSON
-            displayJson(); // Refresh the UI to reflect the updated array
+            updateJsonDisplay();
+            displayJson();
         }
 
         function getValueAt(path) {
@@ -472,75 +486,67 @@
             for (let i = 0; i < path.length; i++) {
                 obj = obj[path[i]];
                 if (obj === undefined) {
-                    return undefined; // Return undefined if the path is invalid
+                    console.error("Path is invalid at", path[i]);
+                    return undefined;
                 }
             }
             return obj;
         }
-
 
         function updateJsonDisplay() {
             document.getElementById('jsonInput').value = JSON.stringify(jsonData, null, 2);
         }
 
         function addObjectToSelectedProduct() {
-            let productIndex = document.getElementById('productSelect').value;
-            let productTitle = jsonData.data.products[productIndex].title;
+            const productIndex = document.getElementById('productSelect').value;
+            const productTitle = jsonData.data.products[productIndex].title;
             addNewObjectToCategory(productTitle);
         }
 
         function addNewObjectToCategory(categoryTitle) {
-            // Prompt user for the number of key/value pairs they want to add
-            let numberOfPairs = parseInt(prompt("How many key/value pairs would you like to add?"));
+            const numberOfPairs = parseInt(prompt("How many key/value pairs would you like to add?"));
             if (isNaN(numberOfPairs) || numberOfPairs <= 0) {
                 alert("Please enter a valid number greater than 0.");
-                return; // Exit if the number is not valid
+                return;
             }
 
-            // Create new item object
-            let newItem = {};
+            const newItem = {};
 
-            // Loop through the number of pairs and prompt for each key and value
             for (let i = 0; i < numberOfPairs; i++) {
-                let key = prompt("Enter key " + (i + 1) + ":");
+                const key = prompt("Enter key " + (i + 1) + ":");
                 if (!key) {
                     alert("Key cannot be empty. Restarting process.");
-                    return; // Exit if no key is provided
+                    return;
                 }
-                let value = prompt("Enter value for " + key + ":");
+                const value = prompt("Enter value for " + key + ":");
                 if (value === null) {
                     alert("Process cancelled.");
-                    return; // Exit if user cancels the value prompt
+                    return;
                 }
                 newItem[key] = value;
             }
 
-            // Find the category in jsonData
-            let category = jsonData.data.products.find(function (product) {
+            const category = jsonData.data.products.find(function (product) {
                 return product.title === categoryTitle;
             });
 
             if (category) {
-                // Assuming 'items' is an array where new objects should be added
                 if (!category.items) {
-                    category.items = []; // Initialize 'items' if it doesn't exist
+                    category.items = [];
                 }
-                // Add the new item to the category's items array
                 category.items.push(newItem);
 
-                // Update the JSON display
                 updateJsonDisplay();
-
-                // Re-display all the fields to include the new item
                 displayJson();
             }
         }
+
         function populateProductDropdown() {
-            let select = document.getElementById('productSelect');
-            select.innerHTML = ''; // Clear existing options
+            const select = document.getElementById('productSelect');
+            select.innerHTML = '';
             if (jsonData.data && jsonData.data.products) {
                 jsonData.data.products.forEach(function (product, index) {
-                    let option = document.createElement('option');
+                    const option = document.createElement('option');
                     option.value = index;
                     option.textContent = product.title;
                     select.appendChild(option);
@@ -548,61 +554,55 @@
             }
         }
 
-
-        // Updated to check if 'items' exists when populating item dropdown
         function populateItemDropdown() {
-            let productIndex = document.getElementById('productSelect').value;
-            let select = document.getElementById('itemSelect');
-            select.innerHTML = ''; // Clear existing options
+            const productIndex = document.getElementById('productSelect').value;
+            const select = document.getElementById('itemSelect');
+            select.innerHTML = '';
 
             if (!jsonData.data.products[productIndex].items) {
-                jsonData.data.products[productIndex].items = []; // Initialize if not exist
+                jsonData.data.products[productIndex].items = [];
             }
 
-            let items = jsonData.data.products[productIndex].items;
+            const items = jsonData.data.products[productIndex].items;
             items.forEach(function (item, index) {
-                let option = document.createElement('option');
+                const option = document.createElement('option');
                 option.value = index;
                 option.textContent = item.title || "Item " + index;
                 select.appendChild(option);
             });
         }
 
-        // Ensuring that removeSelectedItem checks if items exist
         function removeSelectedItem() {
-            let productIndex = document.getElementById('productSelect').value;
-            let itemIndex = document.getElementById('itemSelect').value;
+            const productIndex = document.getElementById('productSelect').value;
+            const itemIndex = document.getElementById('itemSelect').value;
 
             if (!jsonData.data.products[productIndex].items) {
                 alert("No items to remove.");
-                return; // Guard against undefined items array
+                return;
             }
 
-            // Remove the item from the array
             jsonData.data.products[productIndex].items.splice(itemIndex, 1);
 
-            // Update display
             updateJsonDisplay();
             displayJson();
         }
 
-
         function updatePreview() {
-            let preview = document.getElementById('previewContent');
-            preview.innerHTML = ''; // Clear previous content
+            const preview = document.getElementById('previewContent');
+            preview.innerHTML = '';
 
             if (jsonData && jsonData.data && jsonData.data.products) {
                 jsonData.data.products.forEach(function (product) {
-                    let productDiv = document.createElement('div');
-                    productDiv.textContent = product.title;
+                    const productDiv = document.createElement('div');
+                    productDiv.textContent = decodeAmpersands(product.title);
                     productDiv.style.padding = '5px 0';
                     productDiv.style.fontWeight = 'bold';
 
                     if (product.items && product.items.length > 0) {
-                        let itemList = document.createElement('ul');
+                        const itemList = document.createElement('ul');
                         product.items.forEach(function (item) {
-                            let itemLi = document.createElement('li');
-                            itemLi.textContent = item.title;
+                            const itemLi = document.createElement('li');
+                            itemLi.textContent = decodeAmpersands(item.title);
                             itemList.appendChild(itemLi);
                         });
                         productDiv.appendChild(itemList);
@@ -615,17 +615,9 @@
             }
         }
 
-
-
-
-        // Call this function on initial load and after updates
         populateProductDropdown();
 
-
-
-
     </script>
-
 </body>
 
 </html>
