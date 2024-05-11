@@ -130,6 +130,60 @@
             border: 1px solid #b6b5b5;
             margin-bottom: 15px;
         }
+
+        /* Flex layout for key-value pairs */
+        .kv-pair {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        /* Ensure that the key and input are properly spaced */
+        .kv-pair span {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* Make input take available space */
+        .kv-pair input {
+            margin-right: 10px;
+            flex: 1;
+        }
+
+        /* Style for the delete button */
+        .kv-pair .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Hover effect for the delete button */
+        .kv-pair .delete-button:hover {
+            background-color: darkred;
+        }
+
+        /* Container for items, vertically stacked */
+        .item-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        /* Buttons container, vertically stacked */
+        .item-buttons {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* Individual buttons within the button container */
+        .item-buttons button {
+            margin: 5px;
+        }
     </style>
 </head>
 
@@ -201,24 +255,18 @@
             updateJsonDisplay(); // Reflect changes in the textarea
             updatePreview();
         }
+
         function createEditableFields(data, parentElement, path = []) {
             if (Array.isArray(data)) {
                 data.forEach((item, index) => {
-                    // Use the title property if available, otherwise default to "Item <index + 1>"
                     let title = item.title ? item.title : `Item ${index + 1}`;
 
                     let div = document.createElement('div');
-                    div.style.border = '1px solid black'; // Adds a border around each item for clarity
-                    div.style.padding = '10px'; // Adds padding inside the border
-                    div.style.marginBottom = '10px'; // Adds margin below each item
-                    div.style.borderRadius = '5px';
-                    div.style.margin = '10px';
+                    div.className = 'item-container'; // Use item-container class
 
-                    // Creating a container for buttons and the label
                     let buttonDiv = document.createElement('div');
-                    buttonDiv.style.textAlign = 'center'; // Centering buttons and the label
+                    buttonDiv.className = 'item-buttons'; // Use item-buttons class
 
-                    // Adding "Move Up" button
                     if (index > 0) {
                         let upButton = document.createElement('button');
                         upButton.textContent = `Move Up: ${title}`;
@@ -228,7 +276,6 @@
                         buttonDiv.appendChild(upButton);
                     }
 
-                    // Adding "Move Down" button
                     if (index < data.length - 1) {
                         let downButton = document.createElement('button');
                         downButton.textContent = `Move Down: ${title}`;
@@ -238,7 +285,6 @@
                         buttonDiv.appendChild(downButton);
                     }
 
-                    // Adding "Delete" button
                     let deleteButton = document.createElement('button');
                     deleteButton.textContent = `Delete ${title}`;
                     deleteButton.onclick = function () {
@@ -246,7 +292,6 @@
                     };
                     buttonDiv.appendChild(deleteButton);
 
-                    // Adding "Duplicate" button
                     let duplicateButton = document.createElement('button');
                     duplicateButton.textContent = `Duplicate ${title}`;
                     duplicateButton.onclick = function () {
@@ -254,7 +299,6 @@
                     };
                     buttonDiv.appendChild(duplicateButton);
 
-                    // Adding "Add Key-Value Pair" button
                     let addKeyValueButton = document.createElement('button');
                     addKeyValueButton.textContent = `Add Key-Value to ${title}`;
                     addKeyValueButton.onclick = function () {
@@ -262,19 +306,17 @@
                     };
                     buttonDiv.appendChild(addKeyValueButton);
 
-                    div.appendChild(buttonDiv); // Add buttons at the top
+                    div.appendChild(buttonDiv);
 
-                    // Adding a label that indicates the current item's title
                     let label = document.createElement('span');
                     label.className = "json-key";
                     label.innerHTML = `<h2>Item ${index + 1}: ${title}</h2>`;
-                    label.style.display = 'block'; // Makes sure the label is on its own line
-                    label.style.textAlign = 'center'; // Center the label
+                    label.style.display = 'block';
+                    label.style.textAlign = 'center';
                     div.appendChild(label);
 
-                    // Creating an inner div for nested objects or editable fields
                     let innerDiv = document.createElement('div');
-                    innerDiv.style.margin = '50px 100px 100px 100px';
+                    innerDiv.style.margin = '10px 20px';
                     createEditableFields(item, innerDiv, path.concat(index));
                     div.appendChild(innerDiv);
 
@@ -283,13 +325,21 @@
             } else if (typeof data === 'object' && data !== null) {
                 Object.keys(data).forEach((key) => {
                     let div = document.createElement('div');
-                    let span = document.createElement('span');
-                    span.textContent = key + ': ';
-                    div.appendChild(span);
 
+                    // Check if the value is an object or an array
                     if (typeof data[key] === 'object' && data[key] !== null) {
+                        div.className = 'item-container'; // Use item-container class for nested objects
+                        let span = document.createElement('span');
+                        span.textContent = key + ': ';
+                        div.appendChild(span);
                         createEditableFields(data[key], div, path.concat(key));
                     } else {
+                        div.className = 'kv-pair'; // Use kv-pair class for leaf nodes
+
+                        let span = document.createElement('span');
+                        span.textContent = key + ': ';
+                        div.appendChild(span);
+
                         let input = document.createElement('input');
                         input.type = 'text';
                         input.value = data[key];
@@ -297,6 +347,14 @@
                             setValueAt(path.concat(key), input.value);
                         };
                         div.appendChild(input);
+
+                        let deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.className = 'delete-button'; // Add delete button class
+                        deleteButton.onclick = function () {
+                            removeKeyValue(path, key);
+                        };
+                        div.appendChild(deleteButton);
                     }
                     parentElement.appendChild(div);
                 });
@@ -306,12 +364,29 @@
                 input.value = data;
                 input.onchange = function () {
                     setValueAt(path, input.value);
-                    updateJsonDisplay(); // Reflect changes in the JSON textarea
-                    updatePreview(); // Update the preview dynamically
+                    updateJsonDisplay();
+                    updatePreview();
                 };
                 parentElement.appendChild(input);
             }
         }
+
+        // Helper function to remove a key-value pair
+        function removeKeyValue(path, key) {
+            let target = getValueAt(path);
+            if (target && typeof target === 'object' && key in target) {
+                delete target[key];
+                updateJsonDisplay();
+                displayJson();
+            } else {
+                alert('Key not found or invalid path.');
+            }
+        }
+
+
+
+
+
 
         function addKeyValuePairToObject(path, index) {
             // Get the array or object at the specified path
