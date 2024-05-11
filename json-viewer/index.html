@@ -324,39 +324,38 @@
                 });
             } else if (typeof data === 'object' && data !== null) {
                 Object.keys(data).forEach((key) => {
-                    let div = document.createElement('div');
-
-                    // Check if the value is an object or an array
-                    if (typeof data[key] === 'object' && data[key] !== null) {
-                        div.className = 'item-container'; // Use item-container class for nested objects
-                        let span = document.createElement('span');
-                        span.textContent = key + ': ';
-                        div.appendChild(span);
-                        createEditableFields(data[key], div, path.concat(key));
+                    // Skip keys like 'data', 'products', 'items'
+                    if (['data', 'products', 'items'].includes(key)) {
+                        createEditableFields(data[key], parentElement, path.concat(key));
                     } else {
-                        div.className = 'kv-pair'; // Use kv-pair class for leaf nodes
+                        let div = document.createElement('div');
+                        div.className = 'kv-pair'; // Add flexbox class
 
                         let span = document.createElement('span');
                         span.textContent = key + ': ';
                         div.appendChild(span);
 
-                        let input = document.createElement('input');
-                        input.type = 'text';
-                        input.value = data[key];
-                        input.onchange = function () {
-                            setValueAt(path.concat(key), input.value);
-                        };
-                        div.appendChild(input);
+                        if (typeof data[key] === 'object' && data[key] !== null) {
+                            createEditableFields(data[key], div, path.concat(key));
+                        } else {
+                            let input = document.createElement('input');
+                            input.type = 'text';
+                            input.value = data[key];
+                            input.onchange = function () {
+                                setValueAt(path.concat(key), input.value);
+                            };
+                            div.appendChild(input);
 
-                        let deleteButton = document.createElement('button');
-                        deleteButton.textContent = 'Delete';
-                        deleteButton.className = 'delete-button'; // Add delete button class
-                        deleteButton.onclick = function () {
-                            removeKeyValue(path, key);
-                        };
-                        div.appendChild(deleteButton);
+                            let deleteButton = document.createElement('button');
+                            deleteButton.textContent = 'Delete';
+                            deleteButton.className = 'delete-button'; // Add delete button class
+                            deleteButton.onclick = function () {
+                                removeKeyValue(path, key);
+                            };
+                            div.appendChild(deleteButton);
+                        }
+                        parentElement.appendChild(div);
                     }
-                    parentElement.appendChild(div);
                 });
             } else {
                 let input = document.createElement('input');
@@ -382,6 +381,7 @@
                 alert('Key not found or invalid path.');
             }
         }
+
 
 
 
