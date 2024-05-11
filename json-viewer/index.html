@@ -15,9 +15,12 @@
             background: linear-gradient(to right, #00863B 60%, #00863B 60%, #BCCF00 100%);
             font-family: "Poppins", Arial, sans-serif;
         }
-        .main-header, .intro-text {
+
+        .main-header,
+        .intro-text {
             color: #494848;
         }
+
         span {
             margin-top: 20px;
         }
@@ -50,12 +53,14 @@
             height: 50px;
             /* Include padding and border in the element's width */
         }
+
         select option {
             padding: 20px 20px;
             margin: 20px;
             font-size: 20px;
-            
+
         }
+
         button {
             background-color: #007bff;
             color: white;
@@ -95,13 +100,15 @@
             position: sticky;
             top: 20px;
             /* Stick to the top 20px offset */
-            
+
             padding: 50px;
 
         }
+
         #preview h2 {
             color: #fff;
         }
+
         #previewContent {
             background-color: #fff;
             padding: 50px;
@@ -129,10 +136,11 @@
 <body>
 
     <body>
-        
+
         <div class="textarea-container">
             <h1 class="main-header">JSON Editor</h1>
-            <p class="intro-text">Insert JSON and press Load JSON to populate the tool. Making edits to via the interface will update both the JSON and Live Preview. </p>
+            <p class="intro-text">Insert JSON and press Load JSON to populate the tool. Making edits to via the
+                interface will update both the JSON and Live Preview. </p>
             <textarea id="jsonInput" rows="10" cols="50"></textarea><br>
             <button onclick="displayJson()">Load JSON</button><br>
             <select id="productSelect" onchange="populateItemDropdown()"></select>
@@ -246,6 +254,14 @@
                     };
                     buttonDiv.appendChild(duplicateButton);
 
+                    // Adding "Add Key-Value Pair" button
+                    let addKeyValueButton = document.createElement('button');
+                    addKeyValueButton.textContent = `Add Key-Value to ${title}`;
+                    addKeyValueButton.onclick = function () {
+                        addKeyValuePairToObject(path, index);
+                    };
+                    buttonDiv.appendChild(addKeyValueButton);
+
                     div.appendChild(buttonDiv); // Add buttons at the top
 
                     // Adding a label that indicates the current item's title
@@ -295,6 +311,38 @@
                 };
                 parentElement.appendChild(input);
             }
+        }
+
+        function addKeyValuePairToObject(path, index) {
+            // Get the array or object at the specified path
+            let target = getValueAt(path);
+
+            // Ensure the target is an object or array
+            if (Array.isArray(target) && target[index]) {
+                target = target[index];
+            } else {
+                alert("Invalid selection or path.");
+                return;
+            }
+
+            // Prompt the user for the new key-value pair
+            let newKey = prompt("Enter the new key:");
+            if (!newKey) {
+                alert("Key cannot be empty.");
+                return;
+            }
+            let newValue = prompt(`Enter the value for "${newKey}":`);
+            if (newValue === null) {
+                alert("Operation canceled.");
+                return;
+            }
+
+            // Add the new key-value pair to the target object
+            target[newKey] = newValue;
+
+            // Update the JSON display
+            updateJsonDisplay();
+            displayJson();
         }
 
         function duplicateItem(path, index) {
