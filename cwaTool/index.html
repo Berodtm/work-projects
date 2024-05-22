@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Preview Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        textarea, input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .preview {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CWA Preview Tool</h1>
+        <textarea id="inputBox" rows="10" placeholder="Paste your escaped HTML here..."></textarea>
+        <button onclick="generatePreview()">Submit</button>
+        <div id="preview" class="preview"></div>
+    </div>
+
+    <script>
+        function generatePreview() {
+            const input = document.getElementById('inputBox').value;
+            console.log('Input received:', input); // Debugging line
+
+            if (!input) {
+                console.log('No input provided');
+                return;
+            }
+
+            const decodedHTML = decodeHtml(input);
+            console.log('Decoded HTML:', decodedHTML); // Debugging line
+
+            extractAndDisplayContent(decodedHTML);
+        }
+
+        function decodeHtml(html) {
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        function extractAndDisplayContent(html) {
+            const scriptContent = html.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
+            if (!scriptContent) {
+                console.log('No script content found');
+                return;
+            }
+
+            let jsonContent = scriptContent[1];
+            console.log('JSON Content:', jsonContent); // Debugging line
+
+            // Sanitize JSON content
+            jsonContent = jsonContent.replace(/\\'/g, "'").replace(/\\n/g, "\\n")
+                .replace(/\\\"/g, '\\"').replace(/\\&/g, "\\&")
+                .replace(/\\r/g, "\\r").replace(/\\t/g, "\\t")
+                .replace(/\\b/g, "\\b").replace(/\\f/g, "\\f");
+
+            jsonContent = jsonContent.replace(/[\u0000-\u0019]+/g,"");
+
+            let jsonData;
+            try {
+                jsonData = JSON.parse(jsonContent);
+            } catch (e) {
+                console.error('Error parsing JSON:', e);
+                return;
+            }
+
+            const productSummaryBox = jsonData[0]?.data?.product_summary_box;
+            if (!productSummaryBox) {
+                console.log('No product summary box found');
+                return;
+            }
+
+            const previewDiv = document.getElementById('preview');
+            previewDiv.innerHTML = ''; // Clear previous content
+
+            productSummaryBox.forEach(item => {
+                const question = document.createElement('h2');
+                question.textContent = item.summary_question;
+                previewDiv.appendChild(question);
+
+                const answer = document.createElement('div');
+                answer.innerHTML = decodeHtml(item.static_summary_text || item.dynamic_summary_text.map(d => JSON.stringify(d)).join(''));
+                previewDiv.appendChild(answer);
+            });
+        }
+
+        // Test function to validate decoding logic
+        function testDecodeHtml() {
+            const testString = '&lt;div&gt;Test&lt;/div&gt;';
+            const expectedOutput = '<div>Test</div>';
+            const actualOutput = decodeHtml(testString);
+            console.log('Test Decode HTML:', actualOutput === expectedOutput ? 'Passed' : 'Failed');
+        }
+
+        // Run the test
+        testDecodeHtml();
+    </script>
+</body>
+</html>
