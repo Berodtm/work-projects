@@ -27,7 +27,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>CWA Preview Tool</h1>
+        <h1>HTML Preview Tool</h1>
         <textarea id="inputBox" rows="10" placeholder="Paste your escaped HTML here..."></textarea>
         <button onclick="generatePreview()">Submit</button>
         <div id="preview" class="preview"></div>
@@ -81,24 +81,40 @@
                 return;
             }
 
-            const productSummaryBox = jsonData[0]?.data?.product_summary_box;
-            if (!productSummaryBox) {
-                console.log('No product summary box found');
-                return;
-            }
-
             const previewDiv = document.getElementById('preview');
             previewDiv.innerHTML = ''; // Clear previous content
 
-            productSummaryBox.forEach(item => {
-                const question = document.createElement('h2');
-                question.textContent = item.summary_question;
-                previewDiv.appendChild(question);
+            if (jsonData[0]?.data?.product_summary_box) {
+                const productSummaryBox = jsonData[0].data.product_summary_box;
+                productSummaryBox.forEach(item => {
+                    const question = document.createElement('h2');
+                    question.textContent = item.summary_question;
+                    previewDiv.appendChild(question);
 
-                const answer = document.createElement('div');
-                answer.innerHTML = decodeHtml(item.static_summary_text || item.dynamic_summary_text.map(d => JSON.stringify(d)).join(''));
-                previewDiv.appendChild(answer);
-            });
+                    const answer = document.createElement('div');
+                    answer.innerHTML = decodeHtml(item.static_summary_text || item.dynamic_summary_text.map(d => JSON.stringify(d)).join(''));
+                    previewDiv.appendChild(answer);
+                });
+            } else if (jsonData[0]?.data?.creditCard) {
+                const creditCards = jsonData[0].data.creditCard;
+                creditCards.forEach(card => {
+                    const cardSummary = card.cardSummary;
+
+                    const cardName = document.createElement('h2');
+                    cardName.textContent = cardSummary.cardName;
+                    previewDiv.appendChild(cardName);
+
+                    const cardDescription = document.createElement('div');
+                    cardDescription.innerHTML = decodeHtml(cardSummary.cardOfferSpecifics.productDescription);
+                    previewDiv.appendChild(cardDescription);
+
+                    const repExample = document.createElement('div');
+                    repExample.innerHTML = decodeHtml(cardSummary.representative_ExampleDetails.representative_ExampleDetails);
+                    previewDiv.appendChild(repExample);
+                });
+            } else {
+                console.log('No known data structure found');
+            }
         }
 
         // Test function to validate decoding logic
