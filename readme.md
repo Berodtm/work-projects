@@ -7,7 +7,7 @@ Welcome to the **Work Projects Repository** where I showcase a variety of HTML, 
 ### JSON Editor and Viewer
 An interactive web-based tool designed for editing and viewing JSON data dynamically. It features a real-time preview, JSON data manipulation capabilities, and ensures proper character encoding.
 
-- **Live Demo**: [JSON Editor and Viewer](https://berodtm.github.io/work-projects-lbg/json-viewer/)
+- **Live Demo**: [JSON Editor and Viewer](https://berodtm.github.io/work-projects-lbg/json-editor/)
 
 ### OPS AEM ID Generator
 A utility designed for generating unique IDs required in AEM (Adobe Experience Manager) operations. It simplifies the process of creating compliant identifiers for use within AEM projects.
