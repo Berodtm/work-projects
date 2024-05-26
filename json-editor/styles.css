@@ -1,0 +1,246 @@
+body {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    gap: 20px;
+    padding: 20px;
+    background: linear-gradient(
+      to right,
+      #00863b 60%,
+      #00863b 60%,
+      #bccf00 100%
+    );
+    font-family: 'Poppins', Arial, sans-serif;
+    justify-items: center
+  }
+
+  .main-header,
+  .intro-text {
+    color: #494848;
+  }
+
+  span {
+    margin-top: 5px;
+  }
+
+  #output {
+    margin-top: 20px;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    white-space: pre-wrap;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+
+  .json-key {
+    font-weight: bold;
+    color: #155724;
+  }
+
+  input[type='text'],
+  select {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 35px;
+  }
+
+  select option {
+    padding: 20px 20px;
+    margin: 20px;
+    font-size: 20px;
+  }
+
+  button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  div.object-item,
+  div.array-item {
+    margin-left: 20px;
+    border-left: 3px solid #007bff;
+    padding-left: 10px;
+    margin-bottom: 10px;
+  }
+
+  div.object-item {
+    background-color: #eef;
+  }
+
+  div.array-item {
+    background-color: #ffe;
+  }
+
+  #preview {
+    height: 100vh;
+    overflow-y: auto;
+    position: sticky;
+    top: 20px;
+    padding: 50px;
+  }
+
+  #preview h2 {
+    color: #fff;
+  }
+
+  #previewContent {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    width: 300px;
+  }
+
+  .textarea-container {
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #f3f3f3;
+    padding: 50px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+
+  #jsonInput {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #b6b5b5;
+    margin-bottom: 15px;
+  }
+
+  /* Flex layout for key-value pairs */
+  .kv-pair {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  /* Ensure that the key and input are properly spaced */
+  .kv-pair span {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  /* Make input take available space */
+  .kv-pair input {
+    margin-right: 10px;
+    flex: 1;
+  }
+
+  /* Style for the delete button */
+  .kv-pair .delete-button, .sample-button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  /* Hover effect for the delete button */
+  .kv-pair .delete-button:hover {
+    background-color: darkred;
+  }
+
+  /* Container for items, vertically stacked */
+  .item-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Buttons container, inline flex */
+  .item-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  /* Individual buttons within the button container */
+  .item-buttons button {
+    margin: 5px;
+    flex: 0 1 auto;
+  }
+
+  .collapsible {
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+    margin: 5px 0;
+    display: block; /* Ensures collapsible elements stack */
+    width: 100%;
+    position: relative;
+    padding: 20px 0 15px 0; /* Adjust padding to space out items */
+  }
+
+  .collapsible::after {
+    content: '\25BC'; /* Unicode character for down arrow */
+    font-size: 1.2em;
+    position: absolute;
+    right: 10px; /* Position arrow to the right */
+    top: 15px; /* Align arrow to the top */
+    transform: translateY(0); /* Remove vertical centering */
+  }
+
+  .collapsible.active::after {
+    content: '\25B2'; /* Unicode character for up arrow */
+  }
+
+  .collapsible::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: 1px solid #ccc; /* Add underline */
+  }
+
+  .collapsible-content {
+    display: none;
+    overflow: hidden;
+    margin: 0; /* Remove margin for cleaner layout */
+    padding: 0; /* Adjust padding for content */
+  }
+
+  .collapsible.active .collapsible-content {
+    display: block;
+  }
+
+  .collapsible-content ul {
+    list-style-type: none; /* Remove bullet points */
+    padding-left: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+  }
+
+  .collapsible-content li {
+    padding-left: 10px; /* Adjust padding for list items */
+    border-bottom: 1px solid #ccc; /* Add underline for list items */
+    padding: 10px 0; /* Adjust padding for list items */
+    font-weight: normal;
+  }
+
+  /* Remove border-bottom for the last item in each list */
+  .collapsible-content li:last-child {
+    border-bottom: none;
+    
+  }
