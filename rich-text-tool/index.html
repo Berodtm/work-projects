@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich Text Renderer</title>
+    <style>
+        .header { font-size: 2em; font-weight: bold; }
+        .copy { font-size: 1em; }
+        .button { display: inline-block; padding: 10px 20px; background: #007BFF; color: #fff; text-align: center; border-radius: 5px; cursor: pointer; }
+        .editor { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div>
+        <textarea id="jsonInput" class="editor" rows="10" cols="50" placeholder="Paste your JSON here"></textarea>
+        <button onclick="renderRichText()">Render Rich Text</button>
+        <div id="output" contenteditable="true"></div>
+        <button onclick="saveAsPDF()">Save as PDF</button>
+        <button onclick="saveAsWord()">Save as Word</button>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script>
+        function renderRichText() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            const parsedData = JSON.parse(jsonInput);
+            const blocks = parsedData.blocks;
+            let outputHtml = '';
+            
+            blocks.forEach(block => {
+                let text = block.text;
+                let styledText = text;
+                
+                block.inlineStyleRanges.forEach(styleRange => {
+                    const style = styleRange.style.toLowerCase();
+                    const start = styleRange.offset;
+                    const end = styleRange.offset + styleRange.length;
+                    const before = styledText.slice(0, start);
+                    const styled = styledText.slice(start, end);
+                    const after = styledText.slice(end);
+
+                    styledText = before + `<span style="font-${style === 'bold' ? 'weight' : 'style'}: ${style};">${styled}</span>` + after;
+                });
+                
+                outputHtml += `<div class="copy">${styledText}</div>`;
+            });
+            
+            document.getElementById('output').innerHTML = outputHtml;
+        }
+
+        function saveAsPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const output = document.getElementById('output').innerHTML;
+            doc.html(output, {
+                callback: function (doc) {
+                    doc.save('output.pdf');
+                },
+                x: 10,
+                y: 10
+            });
+        }
+
+        function saveAsWord() {
+            const output = document.getElementById('output').innerHTML;
+            const blob = new Blob(['\ufeff', output], {
+                type: 'application/msword'
+            });
+            saveAs(blob, 'output.doc');
+        }
+    </script>
+</body>
+</html>
