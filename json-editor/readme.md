@@ -13,7 +13,7 @@ The JSON Editor and Viewer is a web-based tool designed to make it easy to edit 
 To start using the JSON Editor and Viewer, visit the live tool here: [JSON Editor and Viewer](https://berodtm.github.io/work-projects/json-viewer/).
 
 ### Sample Data
-If you need sample data to see how the tool works or to test its capabilities, click the following link to access a JSON sample: [Sample JSON Data](https://github.com/Berodtm/work-projects-lbg/blob/main/json-viewer/json-code-sample.txt).
+Press the red button to load sample data. 
 
 ## How to Use
 1. **Load JSON Data**: You can paste JSON data directly into the text area or use the sample JSON provided above to get started.
