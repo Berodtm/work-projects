@@ -12,7 +12,7 @@ The AEM Asset Manager is a JavaScript tool designed for managing Adobe Experienc
 
 ## Usage
 Access the tool through the following link to manage your AEM assets effectively:
-[Live Demo of AEM Asset Manager](https://berodtm.github.io/work-projects-lbg/aem-id-assistant/)
+[Live Demo of AEM Asset Manager](https://berodtm.github.io/work-projects/aem-id-assistant/)
 
 ## How to Use
 1. **Enter AEM ID**: Input the AEM ID into the designated field.

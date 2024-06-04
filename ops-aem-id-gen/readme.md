@@ -11,7 +11,7 @@ The AEM ID Generator Tool is designed to automate the creation of Adobe Experien
 
 ## Usage
 Access the tool via the following link to generate your AEM IDs:
-[Live Demo of AEM ID Generator](https://berodtm.github.io/work-projects-lbg/ops-aem-id-gen/)
+[Live Demo of AEM ID Generator](https://berodtm.github.io/work-projects/ops-aem-id-gen/)
 
 ## How to Use
 1. **Select Options**: Choose from available checkboxes and drop-down menus to specify the details of the AEM ID.
