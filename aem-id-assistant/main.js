@@ -470,6 +470,17 @@ const IdApiCheck = async () => {
   }
 };
 
+// helper function to keep variables out of global scope.
+function getUserNameById(userId) {
+  const users = [
+    { id: 9918871, name: 'Guy Babout-James' },
+    { id: 424206, name: 'Rob Dunn' },
+  ];
+
+  const user = users.find((u) => u.id == userId);
+  return user ? `${user.name} ${userId}` : `New user: ${userId}`;
+}
+
 const additionalLiveChecks = async (data) => {
   // Get the resultsContainer element
 
@@ -610,9 +621,9 @@ const additionalLiveChecks = async (data) => {
 
     if (lastModifiedDateTime && modifiedBy) {
       const modifiedInfo = document.createElement('p');
-
-      modifiedInfo.innerHTML = `<strong>Asset last modified:</strong> ${lastModifiedDateTime} by ${modifiedBy}`;
-
+      const modifiedByName = getUserNameById(modifiedBy);
+      
+      modifiedInfo.innerHTML = `<strong>Asset last modified:</strong> ${lastModifiedDateTime} by ${modifiedByName}`;
       resultsContainer.appendChild(modifiedInfo);
     }
 
