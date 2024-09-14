@@ -399,6 +399,10 @@ function copySubID() {
   if (subIdInput) {
     navigator.clipboard.writeText(subIdInput).then(() => {
       subIdCopyBtn.innerText = 'ID Copied';
+
+      setTimeout(() => {
+        subIdCopyBtn.innerText = 'Copy ID';
+      }, 5000);
     });
   }
 }
@@ -622,7 +626,7 @@ const additionalLiveChecks = async (data) => {
     if (lastModifiedDateTime && modifiedBy) {
       const modifiedInfo = document.createElement('p');
       const modifiedByName = getUserNameById(modifiedBy);
-      
+
       modifiedInfo.innerHTML = `<strong>Asset last modified:</strong> ${lastModifiedDateTime} by ${modifiedByName}`;
       resultsContainer.appendChild(modifiedInfo);
     }
