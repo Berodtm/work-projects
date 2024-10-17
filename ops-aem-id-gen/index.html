@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>AEM and Target ID Generator</title>
+    <title>AEM ID Generator</title>
+    <link rel="icon" href="https://pages.ghe.service.group/proactive-onsite-conversations-cdo/ops-aem-id-gen/lbglogo.jpeg" type="image/jpeg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../ops-aem-id-gen/css/stylesheet.css">
@@ -22,8 +24,8 @@
 </head>
 
 <body>
-    <img class="logo" src="lbglogo.jpg" alt="LBG">
-    <h1>Adobe AEM and Target ID Generator V2.1.1</h1>
+    <img class="logo" src="lbglogo.jpeg" alt="LBG">
+    <h1>AEM ID Generator V2.2.0</h1>
 
     <button class="aem-button" data-modal>
         <span>AEM <br>ID Tool Guide</span>
@@ -83,13 +85,13 @@
 
     <div class="form-container" id="whats-new">
         <div>
-            <h2>December 2023 - Whats New on Version 2.1?</h2>
+            <h2>Sep 2024 - Whats New on Version V2.2.0?</h2>
             <hr>
-            <p>
-                <strong> 12/01/24 2.1.1 - </strong> Disabled snow effects as out of season, new format for versions will not list V1 or V2 here. <br><br>
-                Check out the <strong>Automatic Activity Name Builder</strong>, it rapidly creates consistent activity names in bulk. Just type in the Lead Name, tick a few boxes and you have your Activity Names instantly!<br><br>
-                This was a feature that I developed for another project with Sarah Burgon, but we had to postpone it for now. However, I thought this tool was worth sharing, so I added it to the platform. <br><br>
-                To use it, just tick the <strong>Activity Name Builder option at the top of the page.</strong> You will see a form where you can enter various details about your activity. As you fill in the fields, the tool will generate and update multiple activity names and IDs for you. No need to press a submit button, it's that easy! Thanks to Sarah for testing and Becky for providing feedback. <br><br>
+            <p> 
+                <strong>17/10/2024 2.2.0 - </strong>For app redesign IDs added logic to prevent invalid device type combinations, ie a desktop app redesign asset. Moved the Product dropdown down a line to group the checkboxes.  <br><br>
+                <strong>25/09/2024 2.1.8 - </strong>Fixed a bug spotted by Lucy M(thanks) which allowed the user to key a 12 digit unique ID. Fixed another bug that caused the IDs text box to reset when pressing generate. Users can now stack different types of IDs again. <br><br>
+                <strong>11/09/2024 2.1.7 - </strong>Added App Redesign option for IDs. Thanks to Lucy M for the idea and Becky, Benjamin and Melissa for the feedback. <br><br>
+                <strong>02/09/2024 2.1.6 - </strong>Added Money Management Tile placement type. <br><br>
             </p>
         </div>
 
@@ -105,11 +107,28 @@
         </div>
         <div>
             <h3>Version 2 update history</h3>
-            <p>
-                <strong> 11/12/23 V 2.1.0 - </strong> Check out the <strong>Automatic Activity Name Builder</strong>, it rapidly creates consistent activity names in bulk. <br><br>
-                This was a feature that I developed for another project with Sarah Burgon, but we had to postpone it for now. However, I thought this tool was worth sharing, so I added it to the platform. <br><br>
-                To use it, just tick the Activity Name Builder option at the top of the page. You will see a form where you can enter various details about your activity. As you fill in the fields, the tool will generate and update multiple activity names and IDs for you. No need to press a submit button, it's that easy! Thanks to Sarah for testing and Becky for providing feedback. <br><br>
-                <strong> 12/01/24 2.1.1 - </strong> Disabled snow effects as out of season, new format for versions will not list V1 or V2 here. <br><br>
+
+            <p> 
+                <strong>17/10/2024 2.2.0 - </strong>For app redesign IDs added logic to prevent invalid device type combinations, ie a desktop app redesign asset. Moved the Product dropdown down a line to group the checkboxes.  <br><br>
+                <strong>11/09/2024 2.1.8 - </strong>Fixed a bug spotted by Lucy M(thanks) which allowed the user to key a 12 digit unique ID. Fixed another bug that caused the IDs text box to reset when pressing generate. Users can now stack different types of IDs again. <br><br>
+                <strong>11/09/2024 2.1.7 - </strong>Added App Redesign option for IDs. Thanks to Lucy M for the idea and Becky, Benjamin and Melissa for the feedback. <br><br>
+                <strong>02/09/2024 2.1.6 - </strong>Added Money Management Tile placement type. <br><br>
+                <strong>14/06/2024 2.1.5 - </strong>Added Credit Worthiness as is own product type as "CREW". Implemented Cigdem's idea of having the default product selection as "Select Product" to save rework and prevent a common error of assets being incorrectly built in the BATR folder as this ws selected by default. <br><br>
+                <strong>21/05/2024 2.1.4 - </strong>Added in new asset types ahead of app redesign which include "gam", "mam", "sfw", "pom", "vpd". Fixed a bug where vpd would show on other device types.<br><br>
+                <strong>04/04/2024 2.1.3 - </strong>Thanks to Dan Roach spotting the FEA product type missing from the
+                tool, added this in today. <br><br>
+                <strong> 11/03/24 V 2.1.2 - </strong> Added in CWA as device type and VPD as placement type for CWA.
+                <br><br>
+                <strong> 11/12/23 V 2.1.0 - </strong> Check out the <strong>Automatic Activity Name Builder</strong>, it
+                rapidly creates consistent activity names in bulk. <br><br>
+                This was a feature that I developed for another project with Sarah Burgon, but we had to postpone it for
+                now. However, I thought this tool was worth sharing, so I added it to the platform. <br><br>
+                To use it, just tick the Activity Name Builder option at the top of the page. You will see a form where
+                you can enter various details about your activity. As you fill in the fields, the tool will generate and
+                update multiple activity names and IDs for you. No need to press a submit button, it's that easy! Thanks
+                to Sarah for testing and Becky for providing feedback. <br><br>
+                <strong> 12/01/24 2.1.1 - </strong> Disabled snow effects as out of season, new format for versions will
+                not list V1 or V2 here. <br><br>
                 <strong> 21/11/23 V2 2.0.0 - </strong> Version 2 released to main. No further bugs detected. Thanks to
                 Alex and Melissa for testing. <br><br>
                 <strong> 21/11/23 V2 0.0.2 - </strong> Animation added to whats new toggle checkbox. <br><br>
@@ -195,9 +214,10 @@
     </div>
 
     </div>
+
     <form id="activity-name-builder-form-container" class="form-container">
         <div>
-            <h2>Automatic Adobe Target Activity Name Builder</h2>
+            <h2>Automatic Activity Name Builder</h2>
             <hr>
         </div>
         <div id="activity-name-builder-form-input">
@@ -217,6 +237,7 @@
                         <option value="card">CARD</option>
                         <option value="carf">CARF</option>
                         <option value="club">CLUB</option>
+                        <option value="crew">CREW</option>
                         <option value="cura">CURA</option>
                         <option value="hins">HINS</option>
                         <option value="intp">INTP</option>
@@ -231,6 +252,7 @@
                         <option value="pban">PBAN</option>
                         <option value="pcac">PCAC</option>
                         <option value="pens">PENS</option>
+                        <option value="pins">PINS</option>
                         <option value="ppls">PPLS</option>
                         <option value="savs">SAVS</option>
                         <option value="serv">SERV</option>
@@ -274,7 +296,7 @@
                     <input type="checkbox" id="activity-name-builder-dkp-and-mbr" name="device" value="DKP_MBR" />
                     <label for="activity-name-builder-dkp-and-mbr">Desktop and/or MBR</label>
                 </div>
-                
+
             </fieldset>
             <fieldset id="activity-name-builder-activityType">
                 <legend>Test Type</legend>
@@ -295,8 +317,10 @@
                 </div>
 
                 <div>
-                    <input type="checkbox" id="activity-name-builder-ab24" name="test-type" value="ab_test_24" title="Option for date disabled as not needed" disabled/>
-                    <label for="activity-name-builder-ab24" title="Option for date disabled as not needed" style="color: rgb(241, 241, 241);">AB_Test_24</label>
+                    <input type="checkbox" id="activity-name-builder-ab24" name="test-type" value="ab_test_24"
+                        title="Option for date disabled as not needed" disabled />
+                    <label for="activity-name-builder-ab24" title="Option for date disabled as not needed"
+                        style="color: rgb(241, 241, 241);">AB_Test_24</label>
                 </div>
             </fieldset>
             <fieldset>
@@ -337,17 +361,25 @@
         <label for="asset-type">Asset Type:</label>
         <div id="asset-type-checkboxes">
             <div class="checkbox-group">
-                <input type="checkbox" id="bpt" value="bpt" name="asset-type" />
-                <label for="bpt">Big Prompt (BPT)</label>
+                <input type="checkbox" id="afw" value="afw" name="asset-type" />
+                <label for="afw">Account Feature Widget (AFW)</label>
             </div>
             <div class="checkbox-group">
                 <input type="checkbox" id="asm" value="asm" name="asset-type" />
                 <label for="asm">Account Module (ASM)</label>
             </div>
-            <!-- <div class="checkbox-group">
-<input type="checkbox" id="ban" value="ban" name="asset-type" />
-<label for="ban">BAN</label>
-</div> -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="lnk" value="lnk" name="asset-type" />
+                <label for="lnk">Account Link (LNK)</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="aev" value="aev" name="asset-type" />
+                <label for="aev">Account Event (AEV)</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="bpt" value="bpt" name="asset-type" />
+                <label for="bpt">Big Prompt (BPT)</label>
+            </div>
             <div class="checkbox-group">
                 <input type="checkbox" id="dpp" value="dpp" name="asset-type" />
                 <label for="dpp">Digital Product Placement (DPP)</label>
@@ -357,16 +389,28 @@
                 <label for="eal">Expandable Account Link (EAL)</label>
             </div>
             <div class="checkbox-group">
-                <input type="checkbox" id="lnk" value="lnk" name="asset-type" />
-                <label for="lnk">Account Link (LNK)</label>
+                <input type="checkbox" id="fea" value="fea" name="asset-type" />
+                <label for="fea">Featured Nav (FEA)</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="gam" value="gam" name="asset-type" />
+                <label for="gam">Ghost Account Module (GAM)</label>
             </div>
             <div class="checkbox-group">
                 <input type="checkbox" id="lob" value="lob" name="asset-type" />
                 <label for="lob">Logoff Banner (LOB)</label>
             </div>
             <div class="checkbox-group">
+                <input type="checkbox" id="mam" value="mam" name="asset-type" />
+                <label for="mam">Messaging Account Module (MAM)</label>
+            </div>
+            <div class="checkbox-group">
                 <input type="checkbox" id="mrc" value="mrc" name="asset-type" />
                 <label for="mrc">Mobile Carousel (MRC)</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="mmt" value="mmt" name="asset-type" />
+                <label for="mmt">Money Management Tile (MMT)</label>
             </div>
             <div class="checkbox-group">
                 <input type="checkbox" id="nvt" value="nvt" name="asset-type" />
@@ -381,6 +425,10 @@
                 <label for="pom">Priority One Message (POM)</label>
             </div>
             <div class="checkbox-group">
+                <input type="checkbox" id="sfw" value="sfw" name="asset-type" />
+                <label for="sfw">Space Feature Widget (SFW)</label>
+            </div>
+            <div class="checkbox-group">
                 <input type="checkbox" id="stk" value="stk" name="asset-type" />
                 <label for="stk">Sticker (STK)</label>
             </div>
@@ -388,39 +436,21 @@
                 <input type="checkbox" id="til" value="til" name="asset-type" />
                 <label for="til">Tile (TIL)</label>
             </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="vpd" value="vpd" name="asset-type" />
+                <label for="vpd">View Policy Details (VPD)</label>
+            </div>
+            <!-- <div class="checkbox-group">
+        <input type="checkbox" id="ban" value="ban" name="asset-type" />
+        <label for="ban">BAN</label>
+    </div> -->
         </div>
+
+
         <div>
             <hr>
         </div>
-        <label for="product-type">Product Type:</label>
-        <select id="product-type">
-            <option value="batr">BATR</option>
-            <option value="bins">BINS</option>
-            <option value="card">CARD</option>
-            <option value="carf">CARF</option>
-            <option value="club">CLUB</option>
-            <option value="cura">CURA</option>
-            <option value="hins">HINS</option>
-            <option value="intp">INTP</option>
-            <option value="intw">INTW</option>
-            <option value="invs">INVS</option>
-            <option value="lins">LINS</option>
-            <option value="loan">LOAN</option>
-            <option value="mass">MASS</option>
-            <option value="mins">MINS</option>
-            <option value="mort">MORT</option>
-            <option value="over">OVER</option>
-            <option value="pban">PBAN</option>
-            <option value="pcac">PCAC</option>
-            <option value="pens">PENS</option>
-            <option value="ppls">PPLS</option>
-            <option value="savs">SAVS</option>
-            <option value="serv">SERV</option>
-            <option value="test">TEST</option>
-            <option value="trav">TRAV</option>
-            <option value="ukwe">UKWE</option>
-            <!-- Add more options here -->
-        </select>
+        
 
         <label for="device-type">Device Type:</label>
         <div id="device-type">
@@ -436,6 +466,10 @@
                 <input type="checkbox" id="device-type-mbr" name="device-type" value="mbr" />
                 <label for="device-type-mbr">Mobile Browser (MBR) </label>
             </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="device-type-cwa" name="device-type" value="cwa" />
+                <label for="device-type-cwa">Client Web App (CWA) </label>
+            </div>
             <!-- <div class="checkbox-group">
                 <input type="checkbox" id="device-type-#" name="device-type" value="#" disabled/>
                 <label for="device-type-#" >Placeholder </label>
@@ -444,6 +478,38 @@
         <div>
             <hr>
         </div>
+        <label for="product-type">Product Type:</label>
+        <select id="product-type">
+            <option value="" disabled selected>Select Product</option>
+            <option value="batr">BATR</option>
+            <option value="bins">BINS</option>
+            <option value="card">CARD</option>
+            <option value="carf">CARF</option>
+            <option value="club">CLUB</option>
+            <option value="crew">CREW</option>
+            <option value="cura">CURA</option>
+            <option value="hins">HINS</option>
+            <option value="intp">INTP</option>
+            <option value="intw">INTW</option>
+            <option value="invs">INVS</option>
+            <option value="lins">LINS</option>
+            <option value="loan">LOAN</option>
+            <option value="mass">MASS</option>
+            <option value="mins">MINS</option>
+            <option value="mort">MORT</option>
+            <option value="over">OVER</option>
+            <option value="pban">PBAN</option>
+            <option value="pcac">PCAC</option>
+            <option value="pens">PENS</option>
+            <option value="pins">PINS</option>
+            <option value="ppls">PPLS</option>
+            <option value="savs">SAVS</option>
+            <option value="serv">SERV</option>
+            <option value="test">TEST</option>
+            <option value="trav">TRAV</option>
+            <option value="ukwe">UKWE</option>
+            <!-- Add more options here -->
+        </select>
         <label for="placement-type">Placement Type:</label>
         <select id="placement-type">
             <option value="s">Static</option>
@@ -500,7 +566,9 @@
             <option value="9">9</option>
             <!-- Add more options here -->
         </select>
-
+        <div>
+            <input type="checkbox" id="appRd"> Tick for App Redesign IDs
+        </div>
         <div class="button-container">
             <button onclick="generateAEMIDs()">Generate IDs</button>
             <button onclick="copyAEMIDs()">Copy AEM IDs</button>
@@ -508,17 +576,15 @@
             <button onclick="resetForm()">Reset Form</button>
 
         </div>
+        <textarea id="generated-ids" readonly></textarea>
         <div>
             <input type="checkbox" id="checkId2"> Check IDs in AEM for duplicates
         </div>
-
-
-        <textarea id="generated-ids" readonly></textarea>
     </div>
     <div class="form-container live-check-container" id="live-check">
         <div>
-            <h2>Duplicate ID Checker via AEM API </h2>
-            <p>This feature only currently works with a custom set up of Chrome used at work.</p>
+            <h2>Duplicate ID Checker </h2>
+            <p>This feature only currently works with the version of Chrome used for the QA tool.</p>
             <hr>
         </div>
         <!-- <textarea id="liveCheckDisplay" placeholder="Paste AEM IDs here"></textarea> -->
@@ -530,7 +596,7 @@
     </div>
 
     <div class="footer">
-        <strong>Page created by Rob Dunn, POC Operations Team</strong><br><br><strong>
+        <strong>Page created by Rob Dunn (Digital Engagement) from the Proactive Onsite Communications (POC) Team in Consumer Relationships.</strong><br><br><strong>
     </div>
     <div id="snowflakes-container"></div>
 </body>
